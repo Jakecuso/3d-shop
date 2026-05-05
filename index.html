@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MANCUSO FABRICATION // 3D PRINTING · DAYTON OH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --bg:       #0A0A0F;
+      --card:     #12121A;
+      --card2:    #0e0e16;
+      --fg:       #E0E0E0;
+      --muted:    #1C1C2E;
+      --accent:   #00FF88;
+      --accent2:  #00D4FF;
+      --accent3:  #FF00FF;
+      --border:   #2A2A3A;
+      --danger:   #FF3366;
+      --fh:       'Orbitron', monospace;
+      --fb:       'JetBrains Mono', monospace;
+    }
+
+    /* ── RESET ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--fb);
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; font-family: var(--fb); border: none; outline: none; }
+    select, input, textarea {
+      font-family: var(--fb);
+      background: var(--muted);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.5rem 0.75rem;
+      width: 100%;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 8px rgba(0,255,136,0.2);
+    }
+    h1,h2,h3 { font-family: var(--fh); font-weight: 700; letter-spacing: 0.05em; }
+
+    /* ── SCANLINES ───────────────────────────────────────── */
+    #scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.07) 2px,
+        rgba(0,0,0,0.07) 4px
+      );
+    }
+
+    /* ── NAVBAR ──────────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.3s;
+    }
+    #navbar.scrolled { border-bottom-color: rgba(0,255,136,0.25); }
+    .nav-logo {
+      font-family: var(--fh);
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--fg);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-family: var(--fh);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: #888;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cart-btn {
+      font-family: var(--fh);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: transparent;
+      border: 1px solid var(--accent);
+      padding: 0.4rem 0.9rem;
+      transition: all 0.2s;
+    }
+    .nav-cart-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ── SECTION CHROME ──────────────────────────────────── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .terminal-label {
+      font-size: 0.75rem;
+      color: var(--accent2);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.5rem;
+    }
+    .section-header h2 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: 0.1em;
+      color: var(--fg);
+    }
+    .section-header h2 span { color: var(--accent); }
+
+    /* ── REVEAL ANIMATION ────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       SECTION 1 — HERO
+    ════════════════════════════════════════════════════════ */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #matrix {
+      position: absolute;
+      inset: 0;
+      opacity: 0.55;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(10,10,15,0.3) 0%, rgba(10,10,15,0.9) 70%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 2rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--accent2);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+    .glitch-wrap {
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .glitch-title {
+      font-family: var(--fh);
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      text-shadow: 0 0 30px rgba(0,255,136,0.6), 0 0 60px rgba(0,255,136,0.2);
+      position: relative;
+      display: inline-block;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards, glitch-flicker 6s 2s infinite;
+    }
+    .glitch-title::before {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      color: var(--accent2);
+      text-shadow: none;
+      clip-path: polygon(0 0, 100% 0, 100% 38%, 0 38%);
+      animation: glitch-top 6s 2s infinite;
+    }
+    .glitch-title::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      color: var(--accent3);
+      text-shadow: none;
+      clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+      animation: glitch-bot 6s 2s infinite;
+    }
+    .hero-sub {
+      font-size: clamp(0.75rem, 2vw, 1rem);
+      letter-spacing: 0.25em;
+      color: #888;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .hero-sub span { color: var(--fg); }
+    .hero-cta {
+      display: inline-block;
+      font-family: var(--fh);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 1rem 2.5rem;
+      border: 2px solid var(--accent);
+      transition: all 0.25s;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+      box-shadow: 0 0 20px rgba(0,255,136,0.4);
+    }
+    .hero-cta:hover {
+      background: transparent;
+      color: var(--accent);
+      box-shadow: 0 0 40px rgba(0,255,136,0.5);
+    }
+    .scroll-cue {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: #444;
+      animation: blink 2s infinite;
+      z-index: 2;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       SECTION 2 — MACHINES
+    ════════════════════════════════════════════════════════ */
+    #machines {
+      padding: 7rem 2rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .machines-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+    }
+    .machine-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .machine-card:hover {
+      border-color: rgba(0,255,136,0.4);
+      box-shadow: 0 0 30px rgba(0,255,136,0.08);
+    }
+    .machine-card-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .machine-card-header .badge {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+    .machine-card-header h3 {
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--fg);
+    }
+    .machine-img-wrap {
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+      background: var(--muted);
+      position: relative;
+    }
+    .machine-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .machine-card:hover .machine-img-wrap img { transform: scale(1.04); }
+    .machine-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: #444;
+    }
+    .machine-placeholder .p-icon {
+      font-size: 3rem;
+      filter: drop-shadow(0 0 10px rgba(0,255,136,0.3));
+    }
+    .machine-placeholder p { font-size: 0.65rem; letter-spacing: 0.2em; }
+    .machine-specs {
+      padding: 1.5rem;
+    }
+    .machine-specs .spec-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(42,42,58,0.5);
+      font-size: 0.75rem;
+    }
+    .machine-specs .spec-row:last-child { border-bottom: none; }
+    .spec-key { color: #666; }
+    .spec-val { color: var(--accent2); }
+
+    /* Arm gallery */
+    .arm-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      height: 240px;
+    }
+    .arm-gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s;
+    }
+    .arm-gallery img:hover { opacity: 0.8; }
+    .arm-gallery .span2 { grid-column: span 2; }
+
+    /* ════════════════════════════════════════════════════════
+       SECTION 3 — ABOUT
+    ════════════════════════════════════════════════════════ */
+    #about {
+      padding: 7rem 2rem;
+      background: linear-gradient(180deg, var(--bg) 0%, #0d0d18 50%, var(--bg) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-text .terminal-block {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      line-height: 1.8;
+    }
+    .about-text .terminal-block .t-prompt {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-size: 0.7rem;
+    }
+    .about-text p {
+      color: #aaa;
+      line-height: 1.9;
+      margin-bottom: 1rem;
+      font-size: 0.82rem;
+    }
+    .about-text p strong { color: var(--fg); }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+    .stat-card:hover { border-color: var(--accent); }
+    .stat-number {
+      font-family: var(--fh);
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--accent);
+      text-shadow: 0 0 15px rgba(0,255,136,0.4);
+    }
+    .stat-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+    .about-img-side img {
+      width: 100%;
+      border: 1px solid var(--border);
+      filter: brightness(0.85) contrast(1.1);
+    }
+    .payment-info {
+      background: var(--card2);
+      border: 1px solid rgba(0,212,255,0.25);
+      padding: 1.2rem 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .payment-info .pi-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--accent2);
+      margin-bottom: 0.5rem;
+    }
+    .payment-info p {
+      font-size: 0.78rem;
+      color: var(--fg);
+      margin: 0;
+    }
+    .payment-info .handle { color: var(--accent); font-weight: 700; }
+
+    /* ════════════════════════════════════════════════════════
+       SECTION 4 — SHOP
+    ════════════════════════════════════════════════════════ */
+    #shop {
+      padding: 7rem 2rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .shop-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 3rem;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.8rem;
+      font-family: var(--fh);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      background: var(--card2);
+      color: #666;
+      border: none;
+      border-right: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .tab-btn:last-child { border-right: none; }
+    .tab-btn:hover { color: var(--accent2); background: var(--card); }
+    .tab-btn.active {
+      background: var(--muted);
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      position: relative;
+    }
+    .product-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,255,136,0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .product-card:hover {
+      border-color: rgba(0,255,136,0.35);
+      box-shadow: 0 0 25px rgba(0,255,136,0.08), 0 8px 32px rgba(0,0,0,0.4);
+      transform: translateY(-3px);
+    }
+    .product-card:hover::after { opacity: 1; }
+    .product-img-wrap {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      background: var(--muted);
+      position: relative;
+    }
+    .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .product-card:hover .product-img-wrap img { transform: scale(1.06); }
+    .product-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #0e0e16, #12121a);
+      border-bottom: 1px solid var(--border);
+    }
+    .product-placeholder .ph-icon { font-size: 2.5rem; }
+    .product-placeholder .ph-type {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: #444;
+    }
+    .product-body { padding: 1.2rem; }
+    .product-name {
+      font-family: var(--fh);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      color: var(--fg);
+      margin-bottom: 0.4rem;
+    }
+    .product-desc {
+      font-size: 0.72rem;
+      color: #666;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .product-price {
+      font-family: var(--fh);
+      font-size: 1.1rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(0,255,136,0.4);
+      margin-bottom: 1rem;
+    }
+    .product-price .currency { font-size: 0.7rem; }
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .color-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+    .color-row select { flex: 1; font-size: 0.7rem; padding: 0.35rem 0.6rem; }
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .qty-row label { font-size: 0.65rem; color: #666; letter-spacing: 0.1em; white-space: nowrap; }
+    .qty-row input[type="number"] {
+      width: 60px;
+      text-align: center;
+      padding: 0.35rem;
+    }
+    .add-btn {
+      width: 100%;
+      padding: 0.75rem;
+      font-family: var(--fh);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      transition: all 0.2s;
+    }
+    .add-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
+      box-shadow: 0 0 20px rgba(0,255,136,0.3);
+    }
+    .add-btn:active { transform: scale(0.98); }
+    .add-btn.added {
+      background: rgba(0,255,136,0.15);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .custom-card-body {
+      padding: 2rem;
+      text-align: center;
+    }
+    .custom-card-body p { color: #777; font-size: 0.8rem; line-height: 1.8; margin-bottom: 1.5rem; }
+
+    /* ════════════════════════════════════════════════════════
+       SECTION 5 — ORDER
+    ════════════════════════════════════════════════════════ */
+    #order {
+      padding: 7rem 2rem;
+      background: linear-gradient(180deg, var(--bg) 0%, #0d0d18 100%);
+      border-top: 1px solid var(--border);
+    }
+    .order-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    .order-summary h3 {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+    #order-items {
+      min-height: 100px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.75rem;
+    }
+    .order-item:last-child { border-bottom: none; }
+    .oi-name { color: var(--fg); }
+    .oi-meta { color: #666; font-size: 0.65rem; }
+    .oi-price { color: var(--accent); font-family: var(--fh); font-size: 0.85rem; }
+    .oi-remove {
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-size: 0.8rem;
+      padding: 0 0.3rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .oi-remove:hover { opacity: 0.7; }
+    .empty-cart-msg {
+      color: #444;
+      font-size: 0.75rem;
+      text-align: center;
+      padding: 1.5rem;
+      letter-spacing: 0.1em;
+    }
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem;
+      background: var(--muted);
+      border: 1px solid var(--border);
+      font-family: var(--fh);
+      font-size: 0.9rem;
+    }
+    .order-total .tot-label { color: #888; }
+    .order-total .tot-val { color: var(--accent); }
+    .order-form h3 {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--accent2);
+      margin-bottom: 1.5rem;
+    }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: #666;
+      margin-bottom: 0.4rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .delivery-opts { display: flex; gap: 1rem; margin-top: 0.4rem; }
+    .delivery-opts label {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; color: var(--fg); cursor: pointer;
+    }
+    .delivery-opts input[type="radio"] { width: auto; }
+    textarea { resize: vertical; min-height: 80px; }
+    .submit-order-btn {
+      width: 100%;
+      padding: 1rem;
+      font-family: var(--fh);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      background: var(--accent);
+      color: var(--bg);
+      border: 2px solid var(--accent);
+      transition: all 0.25s;
+      box-shadow: 0 0 20px rgba(0,255,136,0.3);
+      margin-top: 1rem;
+    }
+    .submit-order-btn:hover {
+      background: transparent;
+      color: var(--accent);
+      box-shadow: 0 0 40px rgba(0,255,136,0.4);
+    }
+    .payment-note {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--card2);
+      border: 1px solid rgba(0,212,255,0.2);
+      font-size: 0.72rem;
+      color: #888;
+      line-height: 1.7;
+    }
+    .payment-note strong { color: var(--accent2); }
+
+    /* ── FLOATING CART ───────────────────────────────────── */
+    #cart-float {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--fh);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.9rem 1.2rem;
+      border: none;
+      box-shadow: 0 0 25px rgba(0,255,136,0.5);
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    #cart-float:hover {
+      background: var(--bg);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+    }
+    #cart-float-count {
+      background: var(--bg);
+      color: var(--accent);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+    #cart-float:hover #cart-float-count {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ── TOAST ───────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 5.5rem;
+      right: 2rem;
+      z-index: 1001;
+      background: var(--card);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      padding: 0.6rem 1rem;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+      box-shadow: 0 0 15px rgba(0,255,136,0.2);
+    }
+    #toast.show { transform: none; opacity: 1; }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.65rem;
+      color: #444;
+      letter-spacing: 0.15em;
+    }
+    footer span { color: var(--accent); }
+
+    /* ── ANIMATIONS ──────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; } 50% { opacity: 0.2; }
+    }
+    @keyframes glitch-flicker {
+      0%,97%,100% { text-shadow: 0 0 30px rgba(0,255,136,0.6), 0 0 60px rgba(0,255,136,0.2); }
+      98% { text-shadow: -3px 0 var(--accent2), 3px 0 var(--accent3), 0 0 30px rgba(0,255,136,0.6); }
+    }
+    @keyframes glitch-top {
+      0%,96%,100% { transform: none; opacity: 0; }
+      97% { transform: translateX(-4px); opacity: 0.7; }
+      98% { transform: translateX(4px); opacity: 0.7; }
+      99% { transform: none; opacity: 0; }
+    }
+    @keyframes glitch-bot {
+      0%,94%,100% { transform: none; opacity: 0; }
+      95% { transform: translateX(4px); opacity: 0.7; }
+      96% { transform: translateX(-4px); opacity: 0.7; }
+      97% { transform: none; opacity: 0; }
+    }
+    @keyframes pulse-glow {
+      0%,100% { box-shadow: 0 0 10px rgba(0,255,136,0.3); }
+      50%      { box-shadow: 0 0 25px rgba(0,255,136,0.6); }
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .about-inner   { grid-template-columns: 1fr; }
+      .about-img-side { display: none; }
+      .order-inner   { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .nav-links     { display: none; }
+      .machines-grid { grid-template-columns: 1fr; }
+      .stats-grid    { grid-template-columns: repeat(3,1fr); }
+      .arm-gallery   { grid-template-columns: repeat(2,1fr); height: auto; }
+      .arm-gallery img { height: 140px; }
+      .arm-gallery .span2 { grid-column: span 2; }
+      .form-row      { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── SCANLINES ─────────────────────────────────────── -->
+<div id="scanlines"></div>
+
+<!-- ─── NAV ──────────────────────────────────────────── -->
+<nav id="navbar">
+  <div class="nav-logo">MANCUSO <span>FABRICATION</span></div>
+  <div class="nav-links">
+    <a href="#machines">HARDWARE</a>
+    <a href="#about">ABOUT</a>
+    <a href="#shop">CATALOG</a>
+    <a href="#order">ORDER</a>
+  </div>
+  <button class="nav-cart-btn" onclick="scrollToOrder()">[CART <span id="cart-count-nav">0</span>]</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 1 — HERO
+══════════════════════════════════════════════════════ -->
+<section id="hero">
+  <canvas id="matrix"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">&gt; DAYTON, OHIO // PRECISION 3D FABRICATION_</div>
+    <div class="glitch-wrap">
+      <div class="glitch-title" data-text="MANCUSO FABRICATION">MANCUSO FABRICATION</div>
+    </div>
+    <p class="hero-sub">
+      <span>BAMBU X1C · H2C</span> &nbsp;·&nbsp; MULTI-COLOR AMS &nbsp;·&nbsp;
+      <span>25+ FILAMENTS</span> &nbsp;·&nbsp; SHIP OR LOCAL DELIVERY
+    </p>
+    <a href="#shop" class="hero-cta">ENTER THE FORGE</a>
+  </div>
+  <div class="scroll-cue">▼ &nbsp; SCROLL &nbsp; ▼</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 2 — MACHINES
+══════════════════════════════════════════════════════ -->
+<section id="machines">
+  <div class="section-header reveal">
+    <div class="terminal-label">&gt; HARDWARE.sys // ONLINE</div>
+    <h2>THE <span>MACHINES</span></h2>
+  </div>
+
+  <div class="machines-grid">
+
+    <!-- X1C -->
+    <div class="machine-card reveal">
+      <div class="machine-card-header">
+        <h3>BAMBU X1 CARBON</h3>
+        <span class="badge">UNIT ALPHA</span>
+      </div>
+      <div class="machine-img-wrap">
+        <div class="machine-placeholder">
+          <div class="p-icon">⬡</div>
+          <p>DROP PRINTER PHOTO → assets/images/printers/x1c.jpg</p>
+        </div>
+        <!-- <img src="assets/images/printers/x1c.jpg" alt="Bambu X1 Carbon" loading="lazy"> -->
+      </div>
+      <div class="machine-specs">
+        <div class="spec-row"><span class="spec-key">BUILD VOLUME</span><span class="spec-val">256×256×256 mm</span></div>
+        <div class="spec-row"><span class="spec-key">MAX SPEED</span><span class="spec-val">500 mm/s</span></div>
+        <div class="spec-row"><span class="spec-key">COLOR SYSTEM</span><span class="spec-val">AMS (4 colors)</span></div>
+        <div class="spec-row"><span class="spec-key">MATERIALS</span><span class="spec-val">PLA · PETG · ABS · ASA</span></div>
+        <div class="spec-row"><span class="spec-key">PRECISION</span><span class="spec-val">±0.05 mm</span></div>
+      </div>
+    </div>
+
+    <!-- H2C -->
+    <div class="machine-card reveal">
+      <div class="machine-card-header">
+        <h3>BAMBU H2C</h3>
+        <span class="badge">UNIT BETA</span>
+      </div>
+      <div class="machine-img-wrap">
+        <div class="machine-placeholder">
+          <div class="p-icon">⬡</div>
+          <p>DROP PRINTER PHOTO → assets/images/printers/h2c.jpg</p>
+        </div>
+        <!-- <img src="assets/images/printers/h2c.jpg" alt="Bambu H2C" loading="lazy"> -->
+      </div>
+      <div class="machine-specs">
+        <div class="spec-row"><span class="spec-key">BUILD VOLUME</span><span class="spec-val">256×256×256 mm</span></div>
+        <div class="spec-row"><span class="spec-key">MULTI-COLOR</span><span class="spec-val">AMS Compatible</span></div>
+        <div class="spec-row"><span class="spec-key">MATERIALS</span><span class="spec-val">PLA · PETG · TPU</span></div>
+        <div class="spec-row"><span class="spec-key">BED TEMP</span><span class="spec-val">Up to 110°C</span></div>
+        <div class="spec-row"><span class="spec-key">LAYER RES</span><span class="spec-val">0.05 – 0.35 mm</span></div>
+      </div>
+    </div>
+
+    <!-- ARCTOS ARM V1 -->
+    <div class="machine-card reveal">
+      <div class="machine-card-header">
+        <h3>ARCTOS ARM V1</h3>
+        <span class="badge" style="color:var(--accent2);border-color:var(--accent2)">PROTOTYPE</span>
+      </div>
+      <div class="machine-img-wrap" style="height:auto">
+        <div class="arm-gallery">
+          <img src="assets/images/arm/arm-1.jpeg" alt="Arctos arm" loading="lazy" class="span2">
+          <img src="assets/images/arm/arm-2.jpeg" alt="Arctos arm" loading="lazy">
+          <img src="assets/images/arm/arm-3.jpeg" alt="Arctos arm" loading="lazy">
+          <img src="assets/images/arm/arm-4.jpeg" alt="Arctos arm" loading="lazy">
+          <img src="assets/images/arm/arm-5.jpeg" alt="Arctos arm" loading="lazy" class="span2">
+        </div>
+      </div>
+      <div class="machine-specs">
+        <div class="spec-row"><span class="spec-key">AXES</span><span class="spec-val">6-DOF</span></div>
+        <div class="spec-row"><span class="spec-key">DRIVE</span><span class="spec-val">CAN Bus</span></div>
+        <div class="spec-row"><span class="spec-key">VISION</span><span class="spec-val">OpenCV Integration</span></div>
+        <div class="spec-row"><span class="spec-key">FRAME</span><span class="spec-val">Self-Built / 3D Printed</span></div>
+        <div class="spec-row"><span class="spec-key">STATUS</span><span class="spec-val" style="color:var(--accent2)">V2 IN DEVELOPMENT</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 3 — ABOUT
+══════════════════════════════════════════════════════ -->
+<section id="about">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-header reveal">
+      <div class="terminal-label">&gt; OPERATOR.profile // LOADED</div>
+      <h2>ABOUT THE <span>BUILDER</span></h2>
+    </div>
+
+    <div class="about-inner">
+      <div class="about-text reveal">
+        <div class="terminal-block">
+          <div class="t-prompt">&gt; whoami</div>
+          Jake Mancuso — Cybersecurity graduate, Wright State University.<br>
+          Founder, MIND LLC (Mancuso Intelligence &amp; Defense).<br>
+          Incoming AI Engineer · Starting May 22nd.
+        </div>
+        <p>
+          Every print in this shop funds the next version of the robotic arm you see above.
+          <strong>Arctos V2</strong> is in active development — new servo spec, reinforced joints,
+          upgraded vision pipeline. Parts are expensive. Your order ships the future.
+        </p>
+        <p>
+          Prints are made to order on the <strong>Bambu X1C and H2C</strong> — two of the fastest,
+          most precise consumer printers available. 25+ filament colors in stock.
+          Every piece is inspected before it ships.
+        </p>
+        <p>
+          <strong>Dayton, OH area?</strong> Hand-delivery available — no shipping cost.
+          Everywhere else ships USPS or UPS, quoted at checkout.
+        </p>
+        <div class="payment-info">
+          <div class="pi-label">PAYMENT · AFTER CONFIRMATION</div>
+          <p>Venmo <span class="handle">@YOUR-VENMO</span> &nbsp;·&nbsp; CashApp <span class="handle">$YOUR-CASHAPP</span><br>
+          Send order → receive confirmation + payment link → ships within 3–5 days.</p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">2</div>
+            <div class="stat-label">PRINTERS</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">25+</div>
+            <div class="stat-label">COLORS</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">V2</div>
+            <div class="stat-label">ARM TARGET</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-img-side reveal">
+        <img src="assets/images/arm/arm-overview.png" alt="Arctos robotic arm" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 4 — SHOP
+══════════════════════════════════════════════════════ -->
+<section id="shop">
+  <div class="section-header reveal">
+    <div class="terminal-label">&gt; CATALOG.db // 15 ITEMS LOADED</div>
+    <h2>PRODUCT <span>CATALOG</span></h2>
+  </div>
+
+  <div class="shop-tabs reveal">
+    <button class="tab-btn active" onclick="filterProducts('fidgets',this)">FIDGETS [6]</button>
+    <button class="tab-btn" onclick="filterProducts('pet',this)">PET [3]</button>
+    <button class="tab-btn" onclick="filterProducts('vases',this)">VASES [5]</button>
+    <button class="tab-btn" onclick="filterProducts('custom',this)">CUSTOM [∞]</button>
+  </div>
+
+  <div class="product-grid" id="product-grid"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 5 — ORDER
+══════════════════════════════════════════════════════ -->
+<section id="order">
+  <div class="section-header reveal">
+    <div class="terminal-label">&gt; CHECKOUT.exe // READY</div>
+    <h2>SUBMIT <span>ORDER</span></h2>
+  </div>
+
+  <div class="order-inner">
+    <!-- Cart Summary -->
+    <div class="order-summary reveal">
+      <h3>&gt; CART CONTENTS</h3>
+      <div id="order-items">
+        <div class="empty-cart-msg">[ CART EMPTY — ADD ITEMS FROM CATALOG ]</div>
+      </div>
+      <div class="order-total">
+        <span class="tot-label">ESTIMATED TOTAL</span>
+        <span class="tot-val" id="order-total-val">$0.00</span>
+      </div>
+      <div class="payment-note" style="margin-top:1rem">
+        <strong>HOW IT WORKS:</strong><br>
+        1. Add items to cart<br>
+        2. Fill in your info &amp; hit SEND ORDER<br>
+        3. Opens your email pre-filled with everything<br>
+        4. Jake confirms + sends payment link (Venmo / CashApp)<br>
+        5. Ships within 3–5 business days after payment
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="order-form reveal">
+      <h3>&gt; YOUR INFO</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>NAME *</label>
+          <input type="text" id="order-name" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>EMAIL *</label>
+          <input type="email" id="order-email" placeholder="you@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>PHONE (optional)</label>
+        <input type="tel" id="order-phone" placeholder="(555) 000-0000">
+      </div>
+      <div class="form-group">
+        <label>DELIVERY PREFERENCE</label>
+        <div class="delivery-opts">
+          <label><input type="radio" name="delivery" value="Ship to me (provide address below)" checked> Ship to me</label>
+          <label><input type="radio" name="delivery" value="Local pickup/delivery — Dayton OH area"> Local Dayton delivery</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>ADDRESS / NOTES</label>
+        <textarea id="order-notes" placeholder="Shipping address, special requests, custom color combos..."></textarea>
+      </div>
+      <button class="submit-order-btn" onclick="submitOrder()">
+        ⚡ SEND ORDER VIA EMAIL
+      </button>
+      <div class="payment-note">
+        <strong>Venmo:</strong> @YOUR-VENMO &nbsp;·&nbsp; <strong>CashApp:</strong> $YOUR-CASHAPP<br>
+        No payment collected here — Jake will confirm your order and send payment details.
+        <br><small style="color:#555;margin-top:0.3rem;display:block">Edit payment handles: open index.html and search "@YOUR-VENMO"</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FLOATING CART BUTTON ──────────────────────────── -->
+<button id="cart-float" onclick="scrollToOrder()">
+  ◈ CART <span id="cart-float-count">0</span>
+</button>
+
+<!-- ─── TOAST ─────────────────────────────────────────── -->
+<div id="toast"></div>
+
+<!-- ─── FOOTER ────────────────────────────────────────── -->
+<footer>
+  <div>MANCUSO FABRICATION &nbsp;·&nbsp; <span>DAYTON, OH</span> &nbsp;·&nbsp; FOUNDED 2026</div>
+  <div style="margin-top:0.5rem">MIND LLC — MANCUSO INTELLIGENCE &amp; DEFENSE &nbsp;·&nbsp; ALL PRINTS MADE TO ORDER</div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════
+const filamentColors = [
+  { name: 'Black',              hex: '#1a1a1a' },
+  { name: 'Gray',               hex: '#808080' },
+  { name: 'White',              hex: '#f0f0f0' },
+  { name: 'Orange',             hex: '#ff6600' },
+  { name: 'Yellow',             hex: '#ffdd00' },
+  { name: 'Cyan',               hex: '#00e5ff' },
+  { name: 'Neon Yellow',        hex: '#ccff00' },
+  { name: 'Rust Orange [PETG]', hex: '#b84c00' },
+  { name: 'Mint',               hex: '#00ffb3' },
+  { name: 'Pinkurpple',         hex: '#cc44ff' },
+  { name: 'Copper',             hex: '#b87333' },
+  { name: 'Red',                hex: '#cc0000' },
+  { name: 'Carbon Fiber Black', hex: '#1c1c1c' },
+  { name: 'Translucent',        hex: 'rgba(240,240,240,0.3)', border: true },
+  { name: 'Space',              hex: '#2d1b69' },
+  { name: 'Rainbow',            hex: 'linear-gradient(135deg,#ff0000,#ff7700,#ffff00,#00ff00,#0000ff,#8b00ff)' },
+  { name: 'Blue',               hex: '#0055ff' },
+  { name: 'Lime Green',         hex: '#39ff14' },
+  { name: 'Translucent Blue',   hex: 'rgba(0,100,255,0.55)', border: true },
+  { name: 'Matt Orange',        hex: '#d4500a' },
+  { name: 'Dark Yellow',        hex: '#cc9900' },
+  { name: 'Maroon',             hex: '#800000' },
+  { name: 'Deep Green',         hex: '#006600' },
+  { name: 'Silver',             hex: '#c0c0c0' },
+  { name: 'Navy',               hex: '#001f5b' },
+];
+
+const products = [
+  // FIDGETS
+  { id:'twisty-ball',   cat:'fidgets', name:'TWISTY SPHERE',        desc:'Articulated multi-axis rotation. Satisfying click on every pivot.', price:10, img:null, icon:'◉' },
+  { id:'hex-large',     cat:'fidgets', name:'HEX MODULE [LG]',       desc:'Full-size hexagonal tactile array. Precision bearing geometry.', price:14, img:null, icon:'⬡' },
+  { id:'hex-small',     cat:'fidgets', name:'HEX MODULE [SM]',       desc:'Pocket-sized hex fidget. Same precision, compact form factor.', price:10, img:null, icon:'⬡' },
+  { id:'infinity-cube', cat:'fidgets', name:'INFINITY CUBE',          desc:'Eight-segment folding mechanism. Infinite transformation loop.', price:15, img:null, icon:'∞' },
+  { id:'ray-fidget',    cat:'fidgets', name:'RAY UNIT',               desc:'Chunqiu Ray design. Smooth articulation, hypnotic geometry.', price:12, img:null, icon:'✦' },
+  { id:'trilobyte',     cat:'fidgets', name:'TRILOBYTE',              desc:'Fossil-inspired multi-segment flex print. Zero assembly required.', price:13, img:null, icon:'⋈' },
+  // PET
+  { id:'cat-ring-ball', cat:'pet',     name:'CAT RING [BALL]',        desc:'Interactive cat toy ring. Weighted ball insert, rattles on roll.', price:8,  img:'assets/images/products/catring.webp', icon:'◎' },
+  { id:'cat-ring-donut',cat:'pet',     name:'CAT RING [DONUT]',       desc:'Donut-frame track toy. Smooth spin, durable PLA construction.', price:8,  img:'assets/images/products/catring.webp', icon:'◎' },
+  { id:'dog-leash',     cat:'pet',     name:'DOG LEASH HOLDER',       desc:'Wall-mount organizer. Heavy-duty PETG, load-tested design.', price:16, img:'assets/images/products/dog-leash.webp', icon:'⊕' },
+  // VASES
+  { id:'vase-1',        cat:'vases',   name:'VASE UNIT 01',           desc:'Single-color spiral geometry. Clean lines, vase-mode print.', price:22, img:'assets/images/products/vase1.webp', icon:'⬙' },
+  { id:'vase-2',        cat:'vases',   name:'VASE UNIT 02 [EXO]',     desc:'Exoskeleton lattice exterior. Structural art meets function.', price:28, img:'assets/images/products/vase2.webp', icon:'⬙' },
+  { id:'vase-3',        cat:'vases',   name:'VASE UNIT 03 [MODERN]',  desc:'Tall angular profile. Stable weighted base, precise layer lines.', price:24, img:'assets/images/products/vase3.webp', icon:'⬙' },
+  { id:'vase-4',        cat:'vases',   name:'VASE UNIT 04',           desc:'Classic silhouette. Works with any color — especially translucents.', price:22, img:'assets/images/products/vase4.webp', icon:'⬙' },
+  { id:'vase-5',        cat:'vases',   name:'VASE UNIT 05',           desc:'Organic wavy profile. Multi-color gradient compatible.', price:22, img:'assets/images/products/vase5.webp', icon:'⬙' },
+  // CUSTOM
+  { id:'custom',        cat:'custom',  name:'CUSTOM FABRICATION',     desc:'Have a design? Send your STL or describe what you need. Quoted per project. Anything printable — we can make it.', price:0, img:null, icon:'⚙', custom:true },
+];
+
+// ══════════════════════════════════════════════════════
+//  CART STATE
+// ══════════════════════════════════════════════════════
+let cart = [];
+
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  const colorEl = document.getElementById('color-' + id);
+  const qtyEl   = document.getElementById('qty-' + id);
+  const color    = colorEl ? colorEl.value : 'Black';
+  const qty      = qtyEl  ? (parseInt(qtyEl.value) || 1) : 1;
+
+  const existing = cart.find(i => i.id === id && i.color === color);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push({ id, name: product.name, price: product.price, color, qty });
+  }
+
+  updateCartUI();
+  showToast('+ ' + product.name + ' [' + color + ']');
+
+  const btn = document.getElementById('btn-' + id);
+  if (btn) {
+    btn.textContent = '✓ ADDED';
+    btn.classList.add('added');
+    setTimeout(() => {
+      btn.textContent = '+ ADD TO CART';
+      btn.classList.remove('added');
+    }, 1500);
+  }
+}
+
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('cart-count-nav').textContent   = count;
+  document.getElementById('cart-float-count').textContent = count;
+  renderOrderSummary();
+}
+
+function renderOrderSummary() {
+  const container = document.getElementById('order-items');
+  const totalEl   = document.getElementById('order-total-val');
+
+  if (cart.length === 0) {
+    container.innerHTML = '<div class="empty-cart-msg">[ CART EMPTY — ADD ITEMS FROM CATALOG ]</div>';
+    totalEl.textContent = '$0.00';
+    return;
+  }
+
+  let total = 0;
+  container.innerHTML = cart.map((item, idx) => {
+    const subtotal = item.price * item.qty;
+    total += subtotal;
+    return `<div class="order-item">
+      <div>
+        <div class="oi-name">${item.name}</div>
+        <div class="oi-meta">Color: ${item.color}  ·  Qty: ${item.qty}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem">
+        <span class="oi-price">$${subtotal.toFixed(2)}</span>
+        <button class="oi-remove" onclick="removeFromCart(${idx})" title="Remove">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  totalEl.textContent = '$' + total.toFixed(2);
+}
+
+// ══════════════════════════════════════════════════════
+//  SUBMIT ORDER
+// ══════════════════════════════════════════════════════
+function submitOrder() {
+  const name   = document.getElementById('order-name').value.trim();
+  const email  = document.getElementById('order-email').value.trim();
+  const phone  = document.getElementById('order-phone').value.trim();
+  const notes  = document.getElementById('order-notes').value.trim();
+  const del    = document.querySelector('input[name="delivery"]:checked').value;
+
+  if (!name || !email) {
+    alert('Please enter your name and email.');
+    return;
+  }
+  if (cart.length === 0) {
+    alert('Your cart is empty. Add some items first!');
+    return;
+  }
+
+  let total = 0;
+  let itemLines = cart.map(item => {
+    const sub = item.price * item.qty;
+    total += sub;
+    return `  • ${item.name}  ×${item.qty}  |  Color: ${item.color}  |  $${sub.toFixed(2)}`;
+  }).join('\n');
+
+  const body = [
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'NEW ORDER — MANCUSO FABRICATION',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    'CUSTOMER',
+    `  Name:     ${name}`,
+    `  Email:    ${email}`,
+    phone ? `  Phone:    ${phone}` : '',
+    `  Delivery: ${del}`,
+    '',
+    'ORDER ITEMS',
+    itemLines,
+    '',
+    `  ESTIMATED TOTAL:  $${total.toFixed(2)}`,
+    '  (+ shipping if applicable)',
+    '',
+    notes ? `NOTES / ADDRESS\n  ${notes}` : '',
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'Payment via Venmo @YOUR-VENMO or CashApp $YOUR-CASHAPP',
+    'Jake will reply to confirm and send payment details.',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+  ].filter(l => l !== undefined).join('\n');
+
+  const subject = encodeURIComponent('3D Print Order — ' + name);
+  const encoded = encodeURIComponent(body);
+  window.location.href = 'mailto:jakeycuso@gmail.com?subject=' + subject + '&body=' + encoded;
+}
+
+function scrollToOrder() {
+  document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════════════════════
+//  SHOP RENDER
+// ══════════════════════════════════════════════════════
+function buildColorOptions(id) {
+  return filamentColors.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+}
+
+function getFirstColor() { return filamentColors[0]; }
+
+function buildProductCard(p) {
+  if (p.custom) {
+    return `<div class="product-card">
+      <div class="product-placeholder" style="height:160px">
+        <div class="ph-icon" style="font-size:3rem;color:var(--accent3)">${p.icon}</div>
+        <div class="ph-type">CUSTOM ORDER</div>
+      </div>
+      <div class="product-body custom-card-body">
+        <div class="product-name">${p.name}</div>
+        <p style="color:#666;font-size:0.75rem;line-height:1.8;margin-bottom:1.5rem">${p.desc}</p>
+        <a href="#order" class="add-btn" style="display:block;text-align:center;padding:0.75rem;font-family:var(--fh);font-size:0.65rem;letter-spacing:0.15em;font-weight:700;background:transparent;color:var(--accent3);border:1px solid var(--accent3);transition:all 0.2s">
+          SEND INQUIRY
+        </a>
+      </div>
+    </div>`;
+  }
+
+  const imgHtml = p.img
+    ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
+    : `<div class="product-placeholder"><div class="ph-icon">${p.icon}</div><div class="ph-type">3D PRINT</div></div>`;
+
+  const fc = getFirstColor();
+  return `<div class="product-card">
+    <div class="product-img-wrap">${imgHtml}</div>
+    <div class="product-body">
+      <div class="product-name">${p.name}</div>
+      <div class="product-desc">${p.desc}</div>
+      <div class="product-price"><span class="currency">$</span>${p.price.toFixed(2)}</div>
+      <div class="color-row">
+        <div class="color-dot" id="dot-${p.id}" style="background:${fc.hex};${fc.border ? 'border-color:#555' : ''}"></div>
+        <select id="color-${p.id}" onchange="updateDot('${p.id}')">
+          ${buildColorOptions(p.id)}
+        </select>
+      </div>
+      <div class="qty-row">
+        <label>QTY</label>
+        <input type="number" id="qty-${p.id}" value="1" min="1" max="20">
+      </div>
+      <button class="add-btn" id="btn-${p.id}" onclick="addToCart('${p.id}')">+ ADD TO CART</button>
+    </div>
+  </div>`;
+}
+
+function updateDot(id) {
+  const sel = document.getElementById('color-' + id);
+  const dot = document.getElementById('dot-' + id);
+  const color = filamentColors.find(c => c.name === sel.value);
+  if (!color || !dot) return;
+  if (color.hex.startsWith('linear-gradient')) {
+    dot.style.background = color.hex;
+  } else {
+    dot.style.background = color.hex;
+  }
+  dot.style.borderColor = color.border ? '#555' : 'var(--border)';
+}
+
+function filterProducts(cat, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const grid = document.getElementById('product-grid');
+  const filtered = products.filter(p => p.cat === cat);
+  grid.innerHTML = filtered.map(buildProductCard).join('');
+
+  // re-trigger reveal on new cards
+  grid.querySelectorAll('.product-card').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = `opacity 0.4s ${i * 0.07}s ease, transform 0.4s ${i * 0.07}s ease`;
+    requestAnimationFrame(() => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+  });
+}
+
+// Initial render
+filterProducts('fidgets', document.querySelector('.tab-btn'));
+
+// ══════════════════════════════════════════════════════
+//  MATRIX RAIN
+// ══════════════════════════════════════════════════════
+(function () {
+  const canvas = document.getElementById('matrix');
+  const ctx    = canvas.getContext('2d');
+  const chars  = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF@#$%&';
+  const size   = 14;
+  let drops    = [];
+
+  function init() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const cols    = Math.floor(canvas.width / size);
+    drops         = Array.from({ length: cols }, () => Math.random() * -50);
+  }
+
+  function draw() {
+    ctx.fillStyle = 'rgba(10,10,15,0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = size + 'px JetBrains Mono';
+
+    for (let i = 0; i < drops.length; i++) {
+      const ch = chars[Math.floor(Math.random() * chars.length)];
+      const y  = drops[i] * size;
+      // Brighter head character
+      if (drops[i] * size > 0 && drops[i] * size < canvas.height) {
+        ctx.fillStyle = y < size * 3 ? '#ffffff' : (Math.random() > 0.1 ? '#00FF88' : '#00D4FF');
+        ctx.fillText(ch, i * size, y);
+      }
+      if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i] += 0.5;
+    }
+  }
+
+  init();
+  setInterval(draw, 40);
+  window.addEventListener('resize', init);
+})();
+
+// ══════════════════════════════════════════════════════
+//  SCROLL REVEAL
+// ══════════════════════════════════════════════════════
+(function () {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+})();
+
+// ══════════════════════════════════════════════════════
+//  NAVBAR SCROLL
+// ══════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// ══════════════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
