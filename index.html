@@ -840,6 +840,406 @@
       50%      { box-shadow: 0 0 25px rgba(0,255,136,0.6); }
     }
 
+    /* ── ARM EVOLUTION ───────────────────────────────────── */
+    .evo-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .evo-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+    }
+    .danger-panel { border-left: 3px solid var(--danger); }
+    .win-panel    { border-left: 3px solid var(--accent); }
+    .evo-panel-label { font-size: 0.65rem; letter-spacing: 0.2em; margin-bottom: 1rem; }
+    .evo-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid rgba(42,42,58,0.5);
+      font-size: 0.75rem;
+    }
+    .evo-stat-row:last-of-type { border-bottom: none; }
+    .evo-key  { color: #666; flex-shrink: 0; }
+    .evo-val  { font-family: var(--fh); font-size: 0.7rem; text-align: right; }
+    .evo-val.danger { color: var(--danger); }
+    .evo-val.win    { color: var(--accent); }
+    .evo-note { font-size: 0.7rem; color: #555; line-height: 1.7; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .evo-arrow-col  { display: flex; align-items: center; justify-content: center; padding-top: 3rem; }
+    .evo-arrow-wrap { text-align: center; }
+    .evo-arrow      { font-size: 2rem; color: var(--accent2); line-height: 1; }
+    .evo-arrow-label { font-size: 0.55rem; letter-spacing: 0.2em; color: #444; margin-top: 0.3rem; }
+    .chart-section { margin-top: 4rem; }
+    .chart-section-label { font-family: var(--fh); font-size: 0.6rem; letter-spacing: 0.25em; color: var(--accent2); margin-bottom: 1.5rem; }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .chart-card:hover { border-color: var(--accent2); }
+    .chart-card.span2 { grid-column: span 2; }
+    .chart-card img { width: 100%; display: block; }
+    .chart-card-caption {
+      padding: 0.6rem 1rem;
+      font-family: var(--fh);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: #555;
+      border-top: 1px solid var(--border);
+    }
+    .arm-build-photos { margin-top: 3rem; }
+    .arm-photos-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .arm-photo-wrap {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .arm-photo-wrap:hover { border-color: var(--accent); }
+    .arm-photo-wrap img { width: 100%; display: block; max-height: 380px; object-fit: cover; }
+    .arm-photo-caption {
+      padding: 0.6rem 1rem;
+      font-family: var(--fh);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: #555;
+      border-top: 1px solid var(--border);
+      background: var(--card);
+    }
+    @media(max-width:700px){
+      .chart-grid { grid-template-columns: 1fr; }
+      .chart-card.span2 { grid-column: span 1; }
+      .arm-photos-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 800px) {
+      .evo-grid { grid-template-columns: 1fr; }
+      .evo-arrow-col { padding-top: 0; }
+      .evo-arrow { transform: rotate(90deg); }
+    }
+
+    /* ── PHOTO PRINT ─────────────────────────────────────── */
+    .photo-print-card {
+      grid-column: 1 / -1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .photo-print-card:hover {
+      border-color: rgba(0,212,255,0.35);
+      box-shadow: 0 0 30px rgba(0,212,255,0.07);
+    }
+    .photo-print-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 420px;
+    }
+    /* Left: demo panel */
+    .photo-demo-panel {
+      background: var(--card2);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .photo-demo-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--accent2);
+    }
+    .photo-demo-pair {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.75rem;
+      align-items: center;
+      flex: 1;
+    }
+    .demo-img-wrap {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .demo-img-wrap img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+    .demo-img-wrap .demo-tag {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(10,10,15,0.85);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-align: center;
+      padding: 0.25rem;
+    }
+    .demo-img-wrap .demo-tag.after { color: var(--accent2); }
+    .demo-img-wrap .demo-tag.before { color: #666; }
+    .demo-after img {
+      /* real print photo — no filter needed */
+    }
+    .demo-arrow {
+      font-size: 1.2rem;
+      color: var(--accent2);
+      text-align: center;
+    }
+    .demo-sizes {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .demo-size-chip {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--border);
+      color: #666;
+      background: var(--muted);
+    }
+    /* Right: config panel */
+    .photo-config-panel {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .photo-config-panel .product-name { font-size: 1rem; }
+    .photo-config-panel .product-desc { color: #666; font-size: 0.75rem; line-height: 1.7; }
+    /* Upload zone */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      background: var(--card2);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--accent2);
+      background: rgba(0,212,255,0.04);
+    }
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .upload-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+    .upload-hint { font-size: 0.65rem; color: #555; letter-spacing: 0.1em; }
+    .upload-hint strong { color: var(--accent2); }
+    .upload-preview {
+      display: none;
+      position: relative;
+    }
+    .upload-preview img {
+      width: 100%;
+      max-height: 140px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+    .upload-preview .clear-upload {
+      position: absolute;
+      top: 4px; right: 4px;
+      background: rgba(10,10,15,0.85);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      font-size: 0.65rem;
+      padding: 0.15rem 0.4rem;
+      cursor: pointer;
+    }
+    /* Size selector */
+    .size-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.4rem;
+    }
+    .size-opt {
+      padding: 0.5rem 0.2rem;
+      font-family: var(--fh);
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-align: center;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      color: #777;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.5;
+    }
+    .size-opt:hover { border-color: var(--accent2); color: var(--accent2); }
+    .size-opt.selected {
+      border-color: var(--accent2);
+      background: rgba(0,212,255,0.1);
+      color: var(--accent2);
+    }
+    .size-opt .size-dims { font-size: 0.65rem; font-family: var(--fb); color: inherit; }
+    .size-opt .size-price { color: var(--accent); font-family: var(--fh); margin-top: 0.2rem; }
+    /* B&W toggle */
+    .bw-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.75rem;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .bw-row:hover { border-color: var(--accent); }
+    .bw-row .bw-label { font-size: 0.7rem; letter-spacing: 0.1em; }
+    .bw-row .bw-label small { display: block; font-size: 0.6rem; color: #555; letter-spacing: 0.05em; margin-top: 0.1rem; }
+    .bw-toggle-switch {
+      width: 38px; height: 20px;
+      background: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      position: relative;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .bw-toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #555;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .bw-row.active .bw-toggle-switch { background: rgba(0,255,136,0.15); border-color: var(--accent); }
+    .bw-row.active .bw-toggle-switch::after { transform: translateX(18px); background: var(--accent); }
+    /* Dynamic price display */
+    .photo-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .photo-price-val {
+      font-family: var(--fh);
+      font-size: 1.3rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(0,255,136,0.4);
+    }
+    .photo-price-note { font-size: 0.62rem; color: #555; }
+    .photo-add-btn {
+      width: 100%;
+      padding: 0.8rem;
+      font-family: var(--fh);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      background: transparent;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      transition: all 0.2s;
+    }
+    .photo-add-btn:hover {
+      background: var(--accent2);
+      color: var(--bg);
+      box-shadow: 0 0 20px rgba(0,212,255,0.3);
+    }
+    @media (max-width: 800px) {
+      .photo-print-inner { grid-template-columns: 1fr; }
+      .photo-demo-panel  { border-right: none; border-bottom: 1px solid var(--border); }
+      .size-options      { grid-template-columns: repeat(2,1fr); }
+    }
+
+    /* ── NFC INFO ────────────────────────────────────────── */
+    .nfc-info-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      background: var(--card2);
+      border: 1px solid rgba(0,212,255,0.2);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--accent2);
+      cursor: pointer;
+      margin-top: 0.75rem;
+      transition: background 0.2s;
+    }
+    .nfc-info-toggle:hover { background: rgba(0,212,255,0.06); }
+    .nfc-info-body {
+      background: var(--card2);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-top: none;
+      padding: 1rem;
+    }
+    .nfc-section {
+      font-size: 0.72rem;
+      line-height: 1.75;
+      color: #aaa;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .nfc-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    /* ── DONATE ──────────────────────────────────────────── */
+    .donate-section {
+      margin-top: 2rem;
+      background: var(--card2);
+      border: 1px solid rgba(255,0,255,0.2);
+      padding: 1.5rem;
+    }
+    .donate-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--accent3);
+      margin-bottom: 0.4rem;
+    }
+    .donate-section > p {
+      font-size: 0.75rem;
+      color: #666;
+      margin-bottom: 1.2rem;
+    }
+    .donate-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+    .donate-btn {
+      padding: 0.8rem;
+      font-family: var(--fh);
+      font-size: 0.9rem;
+      font-weight: 900;
+      background: transparent;
+      color: var(--accent3);
+      border: 1px solid rgba(255,0,255,0.4);
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .donate-btn:hover {
+      background: rgba(255,0,255,0.12);
+      border-color: var(--accent3);
+      box-shadow: 0 0 20px rgba(255,0,255,0.25);
+      transform: translateY(-2px);
+    }
+    .donate-btn:active { transform: scale(0.97); }
+
     /* ── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 900px) {
       .about-inner   { grid-template-columns: 1fr; }
@@ -854,6 +1254,7 @@
       .arm-gallery img { height: 140px; }
       .arm-gallery .span2 { grid-column: span 2; }
       .form-row      { grid-template-columns: 1fr; }
+      .donate-grid   { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -912,11 +1313,7 @@
         <span class="badge">UNIT ALPHA</span>
       </div>
       <div class="machine-img-wrap">
-        <div class="machine-placeholder">
-          <div class="p-icon">⬡</div>
-          <p>DROP PRINTER PHOTO → assets/images/printers/x1c.jpg</p>
-        </div>
-        <!-- <img src="assets/images/printers/x1c.jpg" alt="Bambu X1 Carbon" loading="lazy"> -->
+        <img src="assets/images/printers/x1c.jpeg" alt="Bambu X1 Carbon" loading="lazy">
       </div>
       <div class="machine-specs">
         <div class="spec-row"><span class="spec-key">BUILD VOLUME</span><span class="spec-val">256×256×256 mm</span></div>
@@ -934,11 +1331,7 @@
         <span class="badge">UNIT BETA</span>
       </div>
       <div class="machine-img-wrap">
-        <div class="machine-placeholder">
-          <div class="p-icon">⬡</div>
-          <p>DROP PRINTER PHOTO → assets/images/printers/h2c.jpg</p>
-        </div>
-        <!-- <img src="assets/images/printers/h2c.jpg" alt="Bambu H2C" loading="lazy"> -->
+        <img src="assets/images/printers/h2c.jpeg" alt="Bambu H2C" loading="lazy">
       </div>
       <div class="machine-specs">
         <div class="spec-row"><span class="spec-key">BUILD VOLUME</span><span class="spec-val">256×256×256 mm</span></div>
@@ -949,27 +1342,116 @@
       </div>
     </div>
 
-    <!-- ARCTOS ARM V1 -->
+    <!-- ROBOT ARM V1 -->
     <div class="machine-card reveal">
       <div class="machine-card-header">
-        <h3>ARCTOS ARM V1</h3>
-        <span class="badge" style="color:var(--accent2);border-color:var(--accent2)">PROTOTYPE</span>
+        <h3>ROBOT ARM V1</h3>
+        <span class="badge" style="color:var(--accent2);border-color:var(--accent2)">RETIRED · REBUILT</span>
       </div>
       <div class="machine-img-wrap" style="height:auto">
         <div class="arm-gallery">
-          <img src="assets/images/arm/arm-1.jpeg" alt="Arctos arm" loading="lazy" class="span2">
-          <img src="assets/images/arm/arm-2.jpeg" alt="Arctos arm" loading="lazy">
-          <img src="assets/images/arm/arm-3.jpeg" alt="Arctos arm" loading="lazy">
-          <img src="assets/images/arm/arm-4.jpeg" alt="Arctos arm" loading="lazy">
-          <img src="assets/images/arm/arm-5.jpeg" alt="Arctos arm" loading="lazy" class="span2">
+          <img src="assets/images/arm/arm-jake.jpeg" alt="Jake with Robot Arm V1" loading="lazy" class="span2">
+          <img src="assets/images/arm/arm-1.jpeg" alt="Robot Arm V1" loading="lazy">
+          <img src="assets/images/arm/arm-belt-pulley.jpg" alt="Belt-Pulley Drive System" loading="lazy">
+          <img src="assets/images/arm/arm-2.jpeg" alt="Robot Arm V1" loading="lazy">
+          <img src="assets/images/arm/arm-3.jpeg" alt="Robot Arm V1" loading="lazy">
+          <img src="assets/images/arm/arm-4.jpeg" alt="Robot Arm V1" loading="lazy">
+          <img src="assets/images/arm/arm-5.jpeg" alt="Robot Arm V1" loading="lazy" class="span2">
         </div>
       </div>
       <div class="machine-specs">
         <div class="spec-row"><span class="spec-key">AXES</span><span class="spec-val">6-DOF</span></div>
-        <div class="spec-row"><span class="spec-key">DRIVE</span><span class="spec-val">CAN Bus</span></div>
-        <div class="spec-row"><span class="spec-key">VISION</span><span class="spec-val">OpenCV Integration</span></div>
-        <div class="spec-row"><span class="spec-key">FRAME</span><span class="spec-val">Self-Built / 3D Printed</span></div>
-        <div class="spec-row"><span class="spec-key">STATUS</span><span class="spec-val" style="color:var(--accent2)">V2 IN DEVELOPMENT</span></div>
+        <div class="spec-row"><span class="spec-key">REACH</span><span class="spec-val">~580 mm</span></div>
+        <div class="spec-row"><span class="spec-key">DRIVE</span><span class="spec-val">Direct-Drive NEMA Steppers</span></div>
+        <div class="spec-row"><span class="spec-key">MASS</span><span class="spec-val">~8.2 kg</span></div>
+        <div class="spec-row"><span class="spec-key">KNOWN FLAW</span><span class="spec-val" style="color:var(--danger)">15° droop at extension</span></div>
+        <div class="spec-row"><span class="spec-key">STATUS</span><span class="spec-val" style="color:var(--accent2)">▶ REBUILT AS V2SWITCH</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     ARM EVOLUTION — V1 → V2SWITCH
+══════════════════════════════════════════════════════ -->
+<section id="arm-evolution" style="padding:5rem 2rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d0d18,var(--bg))">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-header reveal">
+      <div class="terminal-label">&gt; ARM.evolution // V1 → V2SWITCH</div>
+      <h2>WHY WE <span>REBUILT</span> IT</h2>
+    </div>
+    <div class="evo-grid reveal">
+      <!-- V1 failures -->
+      <div class="evo-panel danger-panel">
+        <div class="evo-panel-label" style="color:var(--danger)">&gt; V1 // CRITICAL FAILURES</div>
+        <div class="evo-stat-row"><span class="evo-key">Positional droop at extension</span><span class="evo-val danger">8–15°</span></div>
+        <div class="evo-stat-row"><span class="evo-key">CAN bus faults per hour</span><span class="evo-val danger">3.4 avg</span></div>
+        <div class="evo-stat-row"><span class="evo-key">J2 hold torque required</span><span class="evo-val danger">9.4 N·m (rated 6)</span></div>
+        <div class="evo-stat-row"><span class="evo-key">Mass — distal vs proximal</span><span class="evo-val danger">4.35 kg vs 1.95 kg</span></div>
+        <div class="evo-stat-row"><span class="evo-key">CoM offset at full extension</span><span class="evo-val danger">340 mm from base</span></div>
+        <div class="evo-stat-row"><span class="evo-key">Base footprint</span><span class="evo-val danger">220 × 220 mm</span></div>
+        <div class="evo-note">V1's issues were architectural — the arm was too heavy at the tip and too large for its CAN bus topology. After 6 months of attempted remediation, a clean-sheet redesign was started.</div>
+      </div>
+      <!-- Arrow -->
+      <div class="evo-arrow-col">
+        <div class="evo-arrow-wrap">
+          <div class="evo-arrow">→</div>
+          <div class="evo-arrow-label">REDESIGN</div>
+        </div>
+      </div>
+      <!-- V2Switch wins -->
+      <div class="evo-panel win-panel">
+        <div class="evo-panel-label" style="color:var(--accent)">&gt; V2SWITCH // IMPROVEMENTS</div>
+        <div class="evo-stat-row"><span class="evo-key">Positional accuracy at extension</span><span class="evo-val win">±0.5°</span></div>
+        <div class="evo-stat-row"><span class="evo-key">CAN bus faults (200+ hrs)</span><span class="evo-val win">0</span></div>
+        <div class="evo-stat-row"><span class="evo-key">Drive system</span><span class="evo-val win">Belt + pulley dual-stage</span></div>
+        <div class="evo-stat-row"><span class="evo-key">Max reach</span><span class="evo-val win">630 mm (↑ from 580)</span></div>
+        <div class="evo-stat-row"><span class="evo-key">Total arm mass</span><span class="evo-val win">~3.5 kg (↓ from 8.2)</span></div>
+        <div class="evo-stat-row"><span class="evo-key">Base footprint</span><span class="evo-val win">130 × 130 mm</span></div>
+        <div class="evo-note">V2Switch trades raw torque for precision. Belt-and-pulley drive, closed-loop FOC via magnetic encoders, and a 400 mm hard cap on CAN bus length. Designed to integrate with AI vision pipelines.</div>
+      </div>
+    </div>
+
+    <!-- Engineering charts -->
+    <div class="chart-section reveal">
+      <div class="chart-section-label">&gt; DATA // ENGINEERING ANALYSIS</div>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <img src="assets/images/arm/charts/mass-v1.png" alt="V1 Segment Mass Distribution" loading="lazy">
+          <div class="chart-card-caption">V1 — SEGMENT MASS DISTRIBUTION (FRONT-LOADED PROBLEM)</div>
+        </div>
+        <div class="chart-card">
+          <img src="assets/images/arm/charts/mass-v2switch.png" alt="V2Switch Segment Mass Distribution" loading="lazy">
+          <div class="chart-card-caption">V2SWITCH — BALANCED MASS DISTRIBUTION</div>
+        </div>
+        <div class="chart-card">
+          <img src="assets/images/arm/charts/com-comparison.png" alt="Center of Mass Comparison" loading="lazy">
+          <div class="chart-card-caption">CENTER OF MASS — V1: 340mm vs V2SWITCH: 185mm FROM BASE</div>
+        </div>
+        <div class="chart-card">
+          <img src="assets/images/arm/charts/can-bus.png" alt="CAN Bus Cable Run Lengths" loading="lazy">
+          <div class="chart-card-caption">CAN BUS CABLE RUNS — V1 J5/J6 EXCEEDED 900mm RELIABILITY LIMIT</div>
+        </div>
+        <div class="chart-card span2">
+          <img src="assets/images/arm/charts/radar.png" alt="V1 vs V2Switch Performance Radar" loading="lazy">
+          <div class="chart-card-caption">PERFORMANCE RADAR — V1 vs V2SWITCH // ALL METRICS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Build photos -->
+    <div class="arm-build-photos reveal">
+      <div class="chart-section-label">&gt; BUILD // IN-PROGRESS SHOTS</div>
+      <div class="arm-photos-grid">
+        <div class="arm-photo-wrap">
+          <img src="assets/images/arm/arm-jake.jpeg" alt="Jake with Robot Arm V1" loading="lazy">
+          <div class="arm-photo-caption">JAKE + ROBOT ARM V1 — THE BUILD THAT STARTED IT ALL</div>
+        </div>
+        <div class="arm-photo-wrap">
+          <img src="assets/images/arm/arm-belt-pulley.jpg" alt="Belt-Pulley Drive Mechanism" loading="lazy">
+          <div class="arm-photo-caption">V2SWITCH — DUAL-STAGE BELT &amp; PULLEY DRIVE SYSTEM</div>
+        </div>
       </div>
     </div>
 
@@ -996,7 +1478,7 @@
         </div>
         <p>
           Every print in this shop funds the next version of the robotic arm you see above.
-          <strong>Arctos V2</strong> is in active development — new servo spec, reinforced joints,
+          <strong>Robot Arm V2Switch</strong> is in active development — new servo spec, reinforced joints,
           upgraded vision pipeline. Parts are expensive. Your order ships the future.
         </p>
         <p>
@@ -1010,7 +1492,7 @@
         </p>
         <div class="payment-info">
           <div class="pi-label">PAYMENT · AFTER CONFIRMATION</div>
-          <p>Venmo <span class="handle">@YOUR-VENMO</span> &nbsp;·&nbsp; CashApp <span class="handle">$YOUR-CASHAPP</span><br>
+          <p>Venmo <span class="handle">@imcuso</span> &nbsp;·&nbsp; CashApp <span class="handle">$imcsuo</span><br>
           Send order → receive confirmation + payment link → ships within 3–5 days.</p>
         </div>
         <div class="stats-grid">
@@ -1027,9 +1509,19 @@
             <div class="stat-label">ARM TARGET</div>
           </div>
         </div>
+        <div class="donate-section">
+          <div class="donate-label">&gt; SUPPORT THE BUILD</div>
+          <p>Don't need a print right now? Every dollar goes directly into Robot Arm V2Switch parts.</p>
+          <div class="donate-grid">
+            <button class="donate-btn" onclick="addDonation(10)">$10</button>
+            <button class="donate-btn" onclick="addDonation(20)">$20</button>
+            <button class="donate-btn" onclick="addDonation(50)">$50</button>
+            <button class="donate-btn" onclick="addDonation(100)">$100</button>
+          </div>
+        </div>
       </div>
       <div class="about-img-side reveal">
-        <img src="assets/images/arm/arm-overview.png" alt="Arctos robotic arm" loading="lazy">
+        <img src="assets/images/arm/arm-overview.png" alt="Robot Arm V1" loading="lazy">
       </div>
     </div>
   </div>
@@ -1040,14 +1532,15 @@
 ══════════════════════════════════════════════════════ -->
 <section id="shop">
   <div class="section-header reveal">
-    <div class="terminal-label">&gt; CATALOG.db // 15 ITEMS LOADED</div>
+    <div class="terminal-label">&gt; CATALOG.db // 22 ITEMS LOADED</div>
     <h2>PRODUCT <span>CATALOG</span></h2>
   </div>
 
   <div class="shop-tabs reveal">
     <button class="tab-btn active" onclick="filterProducts('fidgets',this)">FIDGETS [6]</button>
-    <button class="tab-btn" onclick="filterProducts('pet',this)">PET [3]</button>
+    <button class="tab-btn" onclick="filterProducts('pet',this)">PET [2]</button>
     <button class="tab-btn" onclick="filterProducts('vases',this)">VASES [5]</button>
+    <button class="tab-btn" onclick="filterProducts('home',this)">DESK + HOME [7]</button>
     <button class="tab-btn" onclick="filterProducts('custom',this)">CUSTOM [∞]</button>
   </div>
 
@@ -1116,9 +1609,9 @@
         ⚡ SEND ORDER VIA EMAIL
       </button>
       <div class="payment-note">
-        <strong>Venmo:</strong> @YOUR-VENMO &nbsp;·&nbsp; <strong>CashApp:</strong> $YOUR-CASHAPP<br>
+        <strong>Venmo:</strong> @imcuso &nbsp;·&nbsp; <strong>CashApp:</strong> $imcsuo<br>
         No payment collected here — Jake will confirm your order and send payment details.
-        <br><small style="color:#555;margin-top:0.3rem;display:block">Edit payment handles: open index.html and search "@YOUR-VENMO"</small>
+        <br><small style="color:#555;margin-top:0.3rem;display:block">Edit payment handles: open index.html and search "@imcuso"</small>
       </div>
     </div>
   </div>
@@ -1172,16 +1665,15 @@ const filamentColors = [
 
 const products = [
   // FIDGETS
-  { id:'twisty-ball',   cat:'fidgets', name:'TWISTY SPHERE',        desc:'Articulated multi-axis rotation. Satisfying click on every pivot.', price:10, img:null, icon:'◉' },
-  { id:'hex-large',     cat:'fidgets', name:'HEX MODULE [LG]',       desc:'Full-size hexagonal tactile array. Precision bearing geometry.', price:14, img:null, icon:'⬡' },
-  { id:'hex-small',     cat:'fidgets', name:'HEX MODULE [SM]',       desc:'Pocket-sized hex fidget. Same precision, compact form factor.', price:10, img:null, icon:'⬡' },
-  { id:'infinity-cube', cat:'fidgets', name:'INFINITY CUBE',          desc:'Eight-segment folding mechanism. Infinite transformation loop.', price:15, img:null, icon:'∞' },
-  { id:'ray-fidget',    cat:'fidgets', name:'RAY UNIT',               desc:'Chunqiu Ray design. Smooth articulation, hypnotic geometry.', price:12, img:null, icon:'✦' },
-  { id:'trilobyte',     cat:'fidgets', name:'TRILOBYTE',              desc:'Fossil-inspired multi-segment flex print. Zero assembly required.', price:13, img:null, icon:'⋈' },
+  { id:'twisty-ball',   cat:'fidgets', name:'TWISTY SPHERE',        desc:'Articulated multi-axis rotation. Satisfying click on every pivot.', price:10, img:'assets/images/products/fidget-ball.webp', icon:'◉' },
+  { id:'hex-large',     cat:'fidgets', name:'HEX MODULE [LG]',       desc:'Full-size hexagonal tactile array. Precision bearing geometry.', price:14, img:'assets/images/products/fidget-hex.webp', icon:'⬡' },
+  { id:'hex-small',     cat:'fidgets', name:'HEX MODULE [SM]',       desc:'Pocket-sized hex fidget. Same precision, compact form factor.', price:10, img:'assets/images/products/fidget-hex.webp', icon:'⬡' },
+  { id:'infinity-cube', cat:'fidgets', name:'INFINITY CUBE',          desc:'Eight-segment folding mechanism. Infinite transformation loop.', price:15, img:'assets/images/products/fidget-cube.webp', icon:'∞' },
+  { id:'ray-fidget',    cat:'fidgets', name:'RAY UNIT',               desc:'Chunqiu Ray design. Smooth articulation, hypnotic geometry.', price:12, img:'assets/images/products/fidget-ray.webp', icon:'✦' },
+  { id:'trilobyte',     cat:'fidgets', name:'TRILOBYTE',              desc:'Fossil-inspired multi-segment flex print. Zero assembly required.', price:13, img:'assets/images/products/fidget-trilobyte.webp', icon:'⋈' },
   // PET
-  { id:'cat-ring-ball', cat:'pet',     name:'CAT RING [BALL]',        desc:'Interactive cat toy ring. Weighted ball insert, rattles on roll.', price:8,  img:'assets/images/products/catring.webp', icon:'◎' },
-  { id:'cat-ring-donut',cat:'pet',     name:'CAT RING [DONUT]',       desc:'Donut-frame track toy. Smooth spin, durable PLA construction.', price:8,  img:'assets/images/products/catring.webp', icon:'◎' },
-  { id:'dog-leash',     cat:'pet',     name:'DOG LEASH HOLDER',       desc:'Wall-mount organizer. Heavy-duty PETG, load-tested design.', price:16, img:'assets/images/products/dog-leash.webp', icon:'⊕' },
+  { id:'cat-ring',  cat:'pet', name:'CAT RING TOY', desc:'Interactive ring track toy for cats. Choose Ball (weighted, rattles on roll) or Donut (smooth-spin frame). Durable PLA print.', price:12,  img:'assets/images/products/catring.webp', icon:'◎', variant:['Ball','Donut'] },
+  { id:'dog-leash', cat:'pet', name:'DOG LEASH HOLDER', desc:'Wall-mount leash organizer. Heavy-duty PETG, load-tested design. Add your pup\'s name as a custom label.', price:16, img:'assets/images/products/dog-leash.webp', icon:'⊕', petName:true },
   // VASES
   { id:'vase-1',        cat:'vases',   name:'VASE UNIT 01',           desc:'Single-color spiral geometry. Clean lines, vase-mode print.', price:22, img:'assets/images/products/vase1.webp', icon:'⬙' },
   { id:'vase-2',        cat:'vases',   name:'VASE UNIT 02 [EXO]',     desc:'Exoskeleton lattice exterior. Structural art meets function.', price:28, img:'assets/images/products/vase2.webp', icon:'⬙' },
@@ -1189,6 +1681,17 @@ const products = [
   { id:'vase-4',        cat:'vases',   name:'VASE UNIT 04',           desc:'Classic silhouette. Works with any color — especially translucents.', price:22, img:'assets/images/products/vase4.webp', icon:'⬙' },
   { id:'vase-5',        cat:'vases',   name:'VASE UNIT 05',           desc:'Organic wavy profile. Multi-color gradient compatible.', price:22, img:'assets/images/products/vase5.webp', icon:'⬙' },
   // CUSTOM
+  // DESK + HOME
+  { id:'happy-pot',          cat:'home', name:'HAPPY POT PLANTER',         desc:'Smiling face mini succulent planter. No supports needed. Perfect for cacti, air plants, or succulents. Great gift item.', price:14, img:'assets/images/products/home/happy-pot.webp', icon:'◑' },
+  { id:'honeycomb-organizer',cat:'home', name:'HONEYCOMB DESK ORGANIZER',  desc:'Modular hexagonal desk organizer system. Interlock sections to fit your layout — pens, scissors, tape, keys, cables. Printed in one go.', price:24, img:'assets/images/products/home/honeycomb-organizer.webp', icon:'⬡' },
+  { id:'desk-set',           cat:'home', name:'DESIGNER DESK SET',          desc:'Two-piece desk set: wide catch tray + pen cup with organic leaf detailing. Available in two curated two-tone color combos.', price:28, img:'assets/images/products/home/desk-set.webp', icon:'▤', variant:['Gray + Green','Black + Cyan'] },
+  { id:'cable-clips',        cat:'home', name:'CABLE CLIP PACK [×4]',       desc:'Set of 4 desk cable management clips. Stick under your desk or along a surface. No more tangled charging cables.', price:10, img:'assets/images/products/home/cable-clips.webp', icon:'⌇' },
+  { id:'phone-keychain',     cat:'home', name:'PHONE STAND KEYCHAIN',       desc:'Print-in-place foldable phone stand that clips to your keyring. Landscape and portrait. No assembly. Ships ready to use.', price:12, img:'assets/images/products/home/phone-stand-keychain.webp', icon:'◻' },
+  { id:'key-holder',         cat:'home', name:'WALL KEY HOLDER',            desc:'3-slot wall-mount key hook with icon labels. Mounts with two screws (included hardware slot). Never lose your keys again.', price:14, img:'assets/images/products/home/key-holder.webp', icon:'⚷' },
+  { id:'nfc-wifi-tag',       cat:'home', name:'NFC WIFI TAG',               desc:'Tap-to-connect WiFi tag. Pre-programmed with your network credentials. Tap any NFC phone and it auto-joins your WiFi — no passwords, no typing. Perfect for guest rooms, offices, Airbnbs.', price:25, img:'assets/images/products/nfc-tag.webp', icon:'◈', nfcProduct:true },
+  // CUSTOM
+  { id:'makerworld',    cat:'custom',  name:'MAKERWORLD EXPLORER',    desc:'Found something on MakerWorld, Printables, or Thingiverse? Drop the link and we\'ll print it for you. Custom quoted per project.', price:0, img:null, icon:'⬡', makerworld:true },
+  { id:'photo-print',   cat:'custom',  name:'PHOTO TO 3D ART',        desc:'Upload any photo — we turn it into a precision 3D-printed lithophane relief. Hang on a wall, put in a window, or use a backlight to reveal the full image.', price:15, img:null, icon:'◈', photoUpload:true },
   { id:'custom',        cat:'custom',  name:'CUSTOM FABRICATION',     desc:'Have a design? Send your STL or describe what you need. Quoted per project. Anything printable — we can make it.', price:0, img:null, icon:'⚙', custom:true },
 ];
 
@@ -1198,17 +1701,22 @@ const products = [
 let cart = [];
 
 function addToCart(id) {
-  const product = products.find(p => p.id === id);
-  const colorEl = document.getElementById('color-' + id);
-  const qtyEl   = document.getElementById('qty-' + id);
-  const color    = colorEl ? colorEl.value : 'Black';
-  const qty      = qtyEl  ? (parseInt(qtyEl.value) || 1) : 1;
+  const product    = products.find(p => p.id === id);
+  const colorEl    = document.getElementById('color-' + id);
+  const qtyEl      = document.getElementById('qty-' + id);
+  const petEl      = document.getElementById('petname-' + id);
+  const variantEl  = document.getElementById('variant-' + id);
+  const color      = colorEl   ? colorEl.value : 'Black';
+  const qty        = qtyEl     ? (parseInt(qtyEl.value) || 1) : 1;
+  const petName    = petEl     ? petEl.value.trim() : '';
+  const variant    = variantEl ? variantEl.value : '';
+  const displayName = variant ? product.name + ' [' + variant + ']' : product.name;
 
-  const existing = cart.find(i => i.id === id && i.color === color);
+  const existing = cart.find(i => i.id === id && i.color === color && i.petName === petName && i.variant === variant);
   if (existing) {
     existing.qty += qty;
   } else {
-    cart.push({ id, name: product.name, price: product.price, color, qty });
+    cart.push({ id, name: displayName, price: product.price, color, qty, petName, variant });
   }
 
   updateCartUI();
@@ -1228,6 +1736,43 @@ function addToCart(id) {
 function removeFromCart(idx) {
   cart.splice(idx, 1);
   updateCartUI();
+}
+
+function toggleNfcInfo(el) {
+  const body = el.nextElementSibling;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  el.querySelector('.nfc-chevron').textContent = open ? '▾' : '▴';
+}
+
+function addMakerworldRequest() {
+  const link  = document.getElementById('mw-link').value.trim();
+  const color = document.getElementById('mw-color').value.trim();
+  const notes = document.getElementById('mw-notes').value.trim();
+  if (!link) { alert('Please paste a model link first.'); return; }
+  cart.push({
+    id: 'mw-' + Date.now(),
+    name: 'MAKERWORLD REQUEST',
+    price: 0,
+    color: color || 'TBD',
+    qty: 1,
+    petName: '',
+    variant: '',
+    mwLink: link,
+    mwNotes: notes,
+    makerworld: true,
+  });
+  updateCartUI();
+  showToast('+ Request added — Jake will quote you');
+  document.getElementById('mw-link').value = '';
+  document.getElementById('mw-color').value = '';
+  document.getElementById('mw-notes').value = '';
+}
+
+function addDonation(amount) {
+  cart.push({ id: 'donate-' + Date.now(), name: 'SUPPORT THE BUILD', price: amount, color: '', qty: 1, petName: '', variant: '', donation: true });
+  updateCartUI();
+  showToast('+ $' + amount + ' contribution — thank you!');
 }
 
 function updateCartUI() {
@@ -1254,7 +1799,12 @@ function renderOrderSummary() {
     return `<div class="order-item">
       <div>
         <div class="oi-name">${item.name}</div>
-        <div class="oi-meta">Color: ${item.color}  ·  Qty: ${item.qty}</div>
+        <div class="oi-meta">${
+          item.donation   ? 'CONTRIBUTION ♥' :
+          item.photoItem  ? `Photo: ${item.photoNote}` :
+          item.makerworld ? `Link: ${item.mwLink.slice(0,45)}…  ·  Color: ${item.color}` :
+          `Color: ${item.color}  ·  Qty: ${item.qty}${item.petName ? '  ·  Pet: ' + item.petName : ''}${item.variant ? '  ·  Style: ' + item.variant : ''}`
+        }</div>
       </div>
       <div style="display:flex;align-items:center;gap:0.5rem">
         <span class="oi-price">$${subtotal.toFixed(2)}</span>
@@ -1289,7 +1839,10 @@ function submitOrder() {
   let itemLines = cart.map(item => {
     const sub = item.price * item.qty;
     total += sub;
-    return `  • ${item.name}  ×${item.qty}  |  Color: ${item.color}  |  $${sub.toFixed(2)}`;
+    if (item.donation)   return `  • ${item.name}  |  CONTRIBUTION  |  $${sub.toFixed(2)}`;
+    if (item.photoItem)  return `  • ${item.name}  |  File: ${item.photoNote}  |  $${sub.toFixed(2)}\n    *** ATTACH PHOTO TO THIS EMAIL ***`;
+    if (item.makerworld) return `  • MAKERWORLD REQUEST  |  Link: ${item.mwLink}  |  Color: ${item.color}  |  QUOTE NEEDED\n    Notes: ${item.mwNotes || 'none'}`;
+    return `  • ${item.name}  ×${item.qty}  |  Color: ${item.color}${item.variant ? '  |  Style: ' + item.variant : ''}${item.petName ? '  |  Pet: ' + item.petName : ''}  |  $${sub.toFixed(2)}`;
   }).join('\n');
 
   const body = [
@@ -1312,7 +1865,7 @@ function submitOrder() {
     notes ? `NOTES / ADDRESS\n  ${notes}` : '',
     '',
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
-    'Payment via Venmo @YOUR-VENMO or CashApp $YOUR-CASHAPP',
+    'Payment via Venmo @imcuso or CashApp $imcsuo',
     'Jake will reply to confirm and send payment details.',
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
   ].filter(l => l !== undefined).join('\n');
@@ -1336,6 +1889,182 @@ function buildColorOptions(id) {
 function getFirstColor() { return filamentColors[0]; }
 
 function buildProductCard(p) {
+  if (p.makerworld) {
+    return `<div class="photo-print-card" style="border-color:rgba(0,212,255,0.2)">
+      <div class="photo-print-inner">
+        <div class="photo-demo-panel" style="justify-content:center;gap:1.5rem">
+          <div class="photo-demo-label">&gt; BROWSE &amp; REQUEST</div>
+          <div style="font-size:3rem;text-align:center;color:var(--accent2);text-shadow:0 0 20px rgba(0,212,255,0.4)">⬡</div>
+          <div style="font-size:0.75rem;color:#666;line-height:1.8;text-align:center">
+            Found something on MakerWorld, Printables, or Thingiverse you want printed?<br><br>
+            Drop the link below. Jake will check print feasibility, quote you a price, and add it to your order.
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.65rem;color:#444">
+            <span>✓ MakerWorld.com</span>
+            <span>✓ Printables.com</span>
+            <span>✓ Thingiverse.com</span>
+            <span>✓ Any direct STL / 3MF link</span>
+          </div>
+        </div>
+        <div class="photo-config-panel">
+          <div>
+            <div class="product-name">MAKERWORLD EXPLORER</div>
+            <div class="product-desc">${p.desc}</div>
+          </div>
+          <div class="form-group">
+            <label style="font-size:0.62rem;letter-spacing:0.15em;color:#666;display:block;margin-bottom:0.4rem">MODEL LINK *</label>
+            <input type="url" id="mw-link" placeholder="https://makerworld.com/en/models/..." style="font-size:0.72rem">
+          </div>
+          <div class="form-group">
+            <label style="font-size:0.62rem;letter-spacing:0.15em;color:#666;display:block;margin-bottom:0.4rem">COLOR PREFERENCE</label>
+            <input type="text" id="mw-color" placeholder="e.g. Black, or any color from catalog" style="font-size:0.72rem">
+          </div>
+          <div class="form-group">
+            <label style="font-size:0.62rem;letter-spacing:0.15em;color:#666;display:block;margin-bottom:0.4rem">NOTES / QUANTITY</label>
+            <textarea id="mw-notes" style="min-height:60px;font-size:0.72rem" placeholder="Size, quantity, special requirements..."></textarea>
+          </div>
+          <button class="photo-add-btn" onclick="addMakerworldRequest()" style="color:var(--accent2);border-color:var(--accent2)">+ REQUEST THIS PRINT</button>
+          <div style="font-size:0.62rem;color:#444;line-height:1.6;margin-top:0.5rem">
+            Price is quoted per project — Jake will reply with a cost before you pay anything.
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if (p.photoUpload) {
+    const sizes = [
+      { label:'SMALL',  dims:'3"×4"',   price:15, bwPrice:12 },
+      { label:'MEDIUM', dims:'5"×6"',   price:22, bwPrice:18 },
+      { label:'LARGE',  dims:'7"×8"',   price:32, bwPrice:25 },
+      { label:'XL',     dims:'10"×12"', price:45, bwPrice:36 },
+    ];
+    const sizeOpts = sizes.map((s,i) => `
+      <div class="size-opt${i===0?' selected':''}" data-price="${s.price}" data-bwprice="${s.bwPrice}" onclick="selectSize(this,'photo-print')">
+        <div>${s.label}</div>
+        <div class="size-dims">${s.dims}</div>
+        <div class="size-price" id="sopt-price-${i}">$${s.price}</div>
+      </div>`).join('');
+
+    return `<div class="photo-print-card">
+      <div class="photo-print-inner">
+        <!-- Demo panel -->
+        <div class="photo-demo-panel">
+          <div class="photo-demo-label">&gt; DEMO OUTPUT</div>
+          <div class="photo-demo-pair">
+            <div class="demo-img-wrap demo-before">
+              <img src="assets/images/products/photo-demo-print.png" alt="Original photo">
+              <div class="demo-tag before">ORIGINAL</div>
+            </div>
+            <div class="demo-arrow">→</div>
+            <div class="demo-img-wrap demo-after">
+              <img src="assets/images/products/photo-demo-original.png" alt="3D relief print output">
+              <div class="demo-tag after">3D RELIEF PRINT</div>
+            </div>
+          </div>
+          <div class="photo-demo-label" style="margin-top:0.5rem">&gt; AVAILABLE SIZES</div>
+          <div class="demo-sizes">
+            <span class="demo-size-chip">3"×4" SMALL</span>
+            <span class="demo-size-chip">5"×6" MEDIUM</span>
+            <span class="demo-size-chip">7"×8" LARGE</span>
+            <span class="demo-size-chip">10"×12" XL</span>
+          </div>
+          <div style="font-size:0.65rem;color:#555;line-height:1.7;margin-top:0.5rem">
+            Lithophanes are single-layer relief prints — backlit with a phone light or window, the full image emerges. No ink. No paint. Pure geometry.
+          </div>
+        </div>
+        <!-- Config panel -->
+        <div class="photo-config-panel">
+          <div>
+            <div class="product-name">PHOTO TO 3D ART</div>
+            <div class="product-desc">${p.desc}</div>
+          </div>
+          <!-- Upload zone -->
+          <div>
+            <div style="font-size:0.62rem;letter-spacing:0.15em;color:#666;margin-bottom:0.4rem">YOUR PHOTO</div>
+            <div class="upload-zone" id="upload-zone-photo-print"
+                 ondragover="handleDragOver(event,'photo-print')"
+                 ondragleave="handleDragLeave(event,'photo-print')"
+                 ondrop="handleDrop(event,'photo-print')">
+              <input type="file" id="file-photo-print" accept="image/*" onchange="handleFileSelect(event,'photo-print')">
+              <div class="upload-icon">⬆</div>
+              <div class="upload-hint"><strong>Click or drag</strong> your photo here<br>JPG, PNG, HEIC accepted</div>
+            </div>
+            <div class="upload-preview" id="preview-photo-print">
+              <img id="preview-img-photo-print" src="" alt="preview">
+              <button class="clear-upload" onclick="clearUpload('photo-print')">✕ CLEAR</button>
+            </div>
+          </div>
+          <!-- Size selector -->
+          <div>
+            <div style="font-size:0.62rem;letter-spacing:0.15em;color:#666;margin-bottom:0.5rem">SIZE</div>
+            <div class="size-options" id="sizes-photo-print">${sizeOpts}</div>
+          </div>
+          <!-- B&W toggle -->
+          <div class="bw-row" id="bw-row-photo-print" onclick="toggleBW('photo-print')">
+            <div class="bw-label">
+              B&amp;W / GREYSCALE
+              <small>Single-color filament — slightly cheaper, equally sharp</small>
+            </div>
+            <div class="bw-toggle-switch"></div>
+          </div>
+          <!-- Price + add -->
+          <div class="photo-price-row">
+            <div>
+              <div style="font-size:0.6rem;letter-spacing:0.15em;color:#666">PRICE</div>
+              <div class="photo-price-val" id="photo-price-display">$15</div>
+            </div>
+            <div class="photo-price-note">incl. print + ship<br>B&amp;W saves $3–$9</div>
+          </div>
+          <button class="photo-add-btn" onclick="addPhotoToCart()">+ ADD TO CART</button>
+          <div style="font-size:0.62rem;color:#444;line-height:1.6">
+            ⚠ After sending your order email — <strong style="color:#666">attach your photo</strong> before hitting send.
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if (p.nfcProduct) {
+    return `<div class="product-card">
+      <div class="product-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-price"><span class="currency">$</span>${p.price.toFixed(2)}</div>
+        <!-- NFC info accordion -->
+        <div class="nfc-info-toggle" onclick="toggleNfcInfo(this)">
+          <span>&gt; HOW IT WORKS + SETUP</span><span class="nfc-chevron">▾</span>
+        </div>
+        <div class="nfc-info-body" style="display:none">
+          <div class="nfc-section"><strong style="color:var(--accent2)">WHAT IS AN NFC WIFI TAG?</strong><br>
+            A tiny programmable chip (smaller than a coin) that broadcasts your WiFi credentials wirelessly. When someone taps their phone to it, their phone automatically prompts to join your network — no app needed, no password typing. Works anywhere NFC is supported.
+          </div>
+          <div class="nfc-section"><strong style="color:var(--accent)">IPHONE SETUP (iOS 14+)</strong><br>
+            1. Enable NFC: Settings → General → confirm NFC is on (it's on by default on iPhone 7+)<br>
+            2. Hold the top of your iPhone near the tag<br>
+            3. A banner appears — tap it to join the network instantly<br>
+            <em style="color:#555">No app required on iPhone XS and newer</em>
+          </div>
+          <div class="nfc-section"><strong style="color:var(--accent)">ANDROID SETUP</strong><br>
+            1. Enable NFC: Settings → Connections → NFC → toggle ON<br>
+            2. Touch the tag with the back of your phone (near camera)<br>
+            3. Tap the prompt to connect — done<br>
+            <em style="color:#555">Works on most Android 5.0+ devices</em>
+          </div>
+          <div class="nfc-section" style="color:#555;font-size:0.67rem">
+            After ordering: Jake programs the tag with your WiFi name + password before shipping. Provide credentials in the order notes — they are never stored or shared.
+          </div>
+        </div>
+        <div class="qty-row" style="margin-top:0.75rem">
+          <label>QTY</label>
+          <input type="number" id="qty-${p.id}" value="1" min="1" max="10">
+        </div>
+        <button class="add-btn" id="btn-${p.id}" onclick="addToCart('${p.id}')">+ ADD TO CART</button>
+      </div>
+    </div>`;
+  }
+
   if (p.custom) {
     return `<div class="product-card">
       <div class="product-placeholder" style="height:160px">
@@ -1363,12 +2092,22 @@ function buildProductCard(p) {
       <div class="product-name">${p.name}</div>
       <div class="product-desc">${p.desc}</div>
       <div class="product-price"><span class="currency">$</span>${p.price.toFixed(2)}</div>
+      ${p.variant ? `<div class="qty-row" style="margin-bottom:0.75rem">
+        <label>STYLE</label>
+        <select id="variant-${p.id}" style="flex:1">
+          ${p.variant.map(v => `<option value="${v}">${v}</option>`).join('')}
+        </select>
+      </div>` : ''}
       <div class="color-row">
         <div class="color-dot" id="dot-${p.id}" style="background:${fc.hex};${fc.border ? 'border-color:#555' : ''}"></div>
         <select id="color-${p.id}" onchange="updateDot('${p.id}')">
           ${buildColorOptions(p.id)}
         </select>
       </div>
+      ${p.petName ? `<div class="form-group" style="margin-bottom:0.75rem">
+        <label style="font-size:0.62rem;letter-spacing:0.12em;color:#666;display:block;margin-bottom:0.35rem">PET NAME(S) <span style="color:#555">(optional — printed on tag)</span></label>
+        <input type="text" id="petname-${p.id}" placeholder="e.g. Mochi, Beans &amp; Tater" style="font-size:0.72rem">
+      </div>` : ''}
       <div class="qty-row">
         <label>QTY</label>
         <input type="number" id="qty-${p.id}" value="1" min="1" max="20">
@@ -1389,6 +2128,94 @@ function updateDot(id) {
     dot.style.background = color.hex;
   }
   dot.style.borderColor = color.border ? '#555' : 'var(--border)';
+}
+
+// ══════════════════════════════════════════════════════
+//  PHOTO PRINT — state + handlers
+// ══════════════════════════════════════════════════════
+const photoState = { file: null, fileName: '', size: 'SMALL', dims: '3"×4"', price: 15, bwPrice: 12, bw: false };
+
+function selectSize(el, id) {
+  document.querySelectorAll('#sizes-' + id + ' .size-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  photoState.price   = parseInt(el.dataset.price);
+  photoState.bwPrice = parseInt(el.dataset.bwprice);
+  photoState.size    = el.querySelector('div').textContent;
+  photoState.dims    = el.querySelector('.size-dims').textContent;
+  updatePhotoPrice();
+}
+
+function toggleBW(id) {
+  photoState.bw = !photoState.bw;
+  document.getElementById('bw-row-' + id).classList.toggle('active', photoState.bw);
+  updatePhotoPrice();
+}
+
+function updatePhotoPrice() {
+  const p = photoState.bw ? photoState.bwPrice : photoState.price;
+  const el = document.getElementById('photo-price-display');
+  if (el) el.textContent = '$' + p;
+}
+
+function handleDragOver(e, id) {
+  e.preventDefault();
+  document.getElementById('upload-zone-' + id).classList.add('dragover');
+}
+function handleDragLeave(e, id) {
+  document.getElementById('upload-zone-' + id).classList.remove('dragover');
+}
+function handleDrop(e, id) {
+  e.preventDefault();
+  handleDragLeave(e, id);
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) applyUpload(file, id);
+}
+function handleFileSelect(e, id) {
+  const file = e.target.files[0];
+  if (file) applyUpload(file, id);
+}
+function applyUpload(file, id) {
+  photoState.file     = file;
+  photoState.fileName = file.name;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const zone    = document.getElementById('upload-zone-' + id);
+    const preview = document.getElementById('preview-' + id);
+    const img     = document.getElementById('preview-img-' + id);
+    zone.style.display    = 'none';
+    preview.style.display = 'block';
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function clearUpload(id) {
+  photoState.file     = null;
+  photoState.fileName = '';
+  const zone    = document.getElementById('upload-zone-' + id);
+  const preview = document.getElementById('preview-' + id);
+  zone.style.display    = '';
+  preview.style.display = 'none';
+  document.getElementById('file-' + id).value = '';
+}
+
+function addPhotoToCart() {
+  const currentPrice = photoState.bw ? photoState.bwPrice : photoState.price;
+  const finish       = photoState.bw ? 'B&W' : 'Full Color';
+  const label        = `PHOTO PRINT — ${photoState.size} (${photoState.dims}) ${finish}`;
+  const photoNote    = photoState.fileName ? photoState.fileName : '⚠ No photo attached yet';
+  cart.push({
+    id:       'photo-' + Date.now(),
+    name:     label,
+    price:    currentPrice,
+    color:    '',
+    qty:      1,
+    petName:  '',
+    variant:  '',
+    photoNote,
+    photoItem: true,
+  });
+  updateCartUI();
+  showToast('+ ' + label);
 }
 
 function filterProducts(cat, btn) {
