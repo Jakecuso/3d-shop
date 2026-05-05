@@ -80,6 +80,7 @@
       padding: 1rem 2rem;
       background: rgba(10,10,15,0.85);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       transition: border-color 0.3s;
     }
@@ -181,7 +182,7 @@
       color: var(--accent2);
       margin-bottom: 1.5rem;
       opacity: 0;
-      animation: fadeUp 0.8s 0.3s forwards;
+      animation: fadeUp 0.6s 0.1s both;
     }
     .glitch-wrap {
       overflow: hidden;
@@ -197,7 +198,7 @@
       position: relative;
       display: inline-block;
       opacity: 0;
-      animation: fadeUp 0.8s 0.5s forwards, glitch-flicker 6s 2s infinite;
+      animation: fadeUp 0.6s 0.2s both, glitch-flicker 6s 2s infinite;
     }
     .glitch-title::before {
       content: attr(data-text);
@@ -223,7 +224,7 @@
       color: #888;
       margin-bottom: 2.5rem;
       opacity: 0;
-      animation: fadeUp 0.8s 0.8s forwards;
+      animation: fadeUp 0.6s 0.3s both;
     }
     .hero-sub span { color: var(--fg); }
     .hero-cta {
@@ -238,7 +239,7 @@
       border: 2px solid var(--accent);
       transition: all 0.25s;
       opacity: 0;
-      animation: fadeUp 0.8s 1s forwards;
+      animation: fadeUp 0.6s 0.4s both;
       box-shadow: 0 0 20px rgba(0,255,136,0.4);
     }
     .hero-cta:hover {
@@ -1256,6 +1257,13 @@
       .form-row      { grid-template-columns: 1fr; }
       .donate-grid   { grid-template-columns: repeat(2, 1fr); }
     }
+    /* Safari / reduced-motion fallback — ensure nothing stays invisible */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .hero-eyebrow, .hero-sub, .hero-ctas { opacity: 1 !important; animation: none !important; }
+    }
+    /* Force reveal visible on iOS Safari when transitions can't fire */
+    .reveal-safe { opacity: 1 !important; transform: none !important; }
   </style>
 </head>
 <body>
@@ -2321,6 +2329,11 @@ filterProducts('fidgets', document.querySelector('.tab-btn'));
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Safari mobile fallback: if any reveal elements are still hidden after 1.5s, force them visible
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }, 1500);
 })();
 
 // ══════════════════════════════════════════════════════
