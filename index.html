@@ -1532,15 +1532,15 @@
 ══════════════════════════════════════════════════════ -->
 <section id="shop">
   <div class="section-header reveal">
-    <div class="terminal-label">&gt; CATALOG.db // 22 ITEMS LOADED</div>
+    <div class="terminal-label">&gt; CATALOG.db // 28 ITEMS LOADED</div>
     <h2>PRODUCT <span>CATALOG</span></h2>
   </div>
 
   <div class="shop-tabs reveal">
     <button class="tab-btn active" onclick="filterProducts('fidgets',this)">FIDGETS [6]</button>
-    <button class="tab-btn" onclick="filterProducts('pet',this)">PET [2]</button>
+    <button class="tab-btn" onclick="filterProducts('pet',this)">PET [5]</button>
     <button class="tab-btn" onclick="filterProducts('vases',this)">VASES [5]</button>
-    <button class="tab-btn" onclick="filterProducts('home',this)">DESK + HOME [7]</button>
+    <button class="tab-btn" onclick="filterProducts('home',this)">DESK + HOME [10]</button>
     <button class="tab-btn" onclick="filterProducts('custom',this)">CUSTOM [∞]</button>
   </div>
 
@@ -1673,7 +1673,10 @@ const products = [
   { id:'trilobyte',     cat:'fidgets', name:'TRILOBYTE',              desc:'Fossil-inspired multi-segment flex print. Zero assembly required.', price:13, img:'assets/images/products/fidget-trilobyte.webp', icon:'⋈' },
   // PET
   { id:'cat-ring',  cat:'pet', name:'CAT RING TOY', desc:'Interactive ring track toy for cats. Choose Ball (weighted, rattles on roll) or Donut (smooth-spin frame). Durable PLA print.', price:12,  img:'assets/images/products/catring.webp', icon:'◎', variant:['Ball','Donut'] },
-  { id:'dog-leash', cat:'pet', name:'DOG LEASH HOLDER', desc:'Wall-mount leash organizer. Heavy-duty PETG, load-tested design. Add your pup\'s name as a custom label.', price:16, img:'assets/images/products/dog-leash.webp', icon:'⊕', petName:true },
+  { id:'dog-leash',        cat:'pet', name:'DOG LEASH HOLDER',       desc:'Wall-mount leash organizer. Heavy-duty PETG, load-tested design. Add your pup\'s name as a custom label.', price:16, img:'assets/images/products/dog-leash.webp', icon:'⊕', petName:true },
+  { id:'dog-scoop-custom', cat:'pet', name:'CUSTOM DOG FOOD SCOOP',  desc:'1-cup dog food scoop with your dog\'s name + paw print built in. Two-tone print: pick a scoop color and a separate name/paw color.', price:16, img:'assets/images/products/pet/dog-scoop.webp', icon:'∪', petName:true, dualColor:true, color1Label:'SCOOP COLOR', color2Label:'NAME + PAW COLOR' },
+  { id:'paw-scoop',        cat:'pet', name:'PAW FOOD SCOOP',         desc:'Paw-themed pet food scoop with embossed paw print on the handle. Pick your handle color and accent the paw in Black, White, or Pinkurpple.', price:14, img:'assets/images/products/pet/paw-scoop.webp', icon:'⊙', dualColor:true, color1Label:'HANDLE COLOR', color2Label:'PAW COLOR', color2Options:['Black','White','Pinkurpple'] },
+  { id:'large-scoop',      cat:'pet', name:'LARGE PET SCOOP',        desc:'Oversized food scoop for large bags — dry food, kibble, birdseed, litter. Comfortable handle, deep bowl, stands upright.', price:10, img:'assets/images/products/pet/large-scoop.webp', icon:'⊔' },
   // VASES
   { id:'vase-1',        cat:'vases',   name:'VASE UNIT 01',           desc:'Single-color spiral geometry. Clean lines, vase-mode print.', price:22, img:'assets/images/products/vase1.webp', icon:'⬙' },
   { id:'vase-2',        cat:'vases',   name:'VASE UNIT 02 [EXO]',     desc:'Exoskeleton lattice exterior. Structural art meets function.', price:28, img:'assets/images/products/vase2.webp', icon:'⬙' },
@@ -1689,6 +1692,9 @@ const products = [
   { id:'phone-keychain',     cat:'home', name:'PHONE STAND KEYCHAIN',       desc:'Print-in-place foldable phone stand that clips to your keyring. Landscape and portrait. No assembly. Ships ready to use.', price:12, img:'assets/images/products/home/phone-stand-keychain.webp', icon:'◻' },
   { id:'key-holder',         cat:'home', name:'WALL KEY HOLDER',            desc:'3-slot wall-mount key hook with icon labels. Mounts with two screws (included hardware slot). Never lose your keys again.', price:14, img:'assets/images/products/home/key-holder.webp', icon:'⚷' },
   { id:'nfc-wifi-tag',       cat:'home', name:'NFC WIFI TAG',               desc:'Tap-to-connect WiFi tag. Pre-programmed with your network credentials. Tap any NFC phone and it auto-joins your WiFi — no passwords, no typing. Perfect for guest rooms, offices, Airbnbs.', price:25, img:'assets/images/products/nfc-tag.webp', icon:'◈', nfcProduct:true },
+  { id:'axolotl',            cat:'home', name:'AXOLOTL FIGURE',             desc:'Detailed axolotl figurine with feathery gill plumes. Two-tone print — pick body color and a contrasting color for the gills/fins. Desk toy or shelf piece.', price:13, img:'assets/images/products/home/axolotl.webp', icon:'〜', dualColor:true, color1Label:'BODY COLOR', color2Label:'GILLS + FINS COLOR' },
+  { id:'elephant-sm',        cat:'home', name:'ELEPHANT FIGURE [SM]',       desc:'Small articulated elephant figure. Flexible trunk, detailed texture. Great desk companion or gift.', price:12, img:'assets/images/products/home/elephant.webp', icon:'◟' },
+  { id:'elephant-lg',        cat:'home', name:'ELEPHANT FIGURE [LG]',       desc:'Giant version of the elephant figure — impressive shelf display piece. Same detail, significantly larger presence.', price:20, img:'assets/images/products/home/elephant.webp', icon:'◟' },
   // CUSTOM
   { id:'makerworld',    cat:'custom',  name:'MAKERWORLD EXPLORER',    desc:'Found something on MakerWorld, Printables, or Thingiverse? Drop the link and we\'ll print it for you. Custom quoted per project.', price:0, img:null, icon:'⬡', makerworld:true },
   { id:'photo-print',   cat:'custom',  name:'PHOTO TO 3D ART',        desc:'Upload any photo — we turn it into a precision 3D-printed lithophane relief. Hang on a wall, put in a window, or use a backlight to reveal the full image.', price:15, img:null, icon:'◈', photoUpload:true },
@@ -1703,24 +1709,27 @@ let cart = [];
 function addToCart(id) {
   const product    = products.find(p => p.id === id);
   const colorEl    = document.getElementById('color-' + id);
+  const color2El   = document.getElementById('color2-' + id);
   const qtyEl      = document.getElementById('qty-' + id);
   const petEl      = document.getElementById('petname-' + id);
   const variantEl  = document.getElementById('variant-' + id);
   const color      = colorEl   ? colorEl.value : 'Black';
+  const color2     = color2El  ? color2El.value : '';
   const qty        = qtyEl     ? (parseInt(qtyEl.value) || 1) : 1;
   const petName    = petEl     ? petEl.value.trim() : '';
   const variant    = variantEl ? variantEl.value : '';
   const displayName = variant ? product.name + ' [' + variant + ']' : product.name;
 
-  const existing = cart.find(i => i.id === id && i.color === color && i.petName === petName && i.variant === variant);
+  const existing = cart.find(i => i.id === id && i.color === color && i.color2 === color2 && i.petName === petName && i.variant === variant);
   if (existing) {
     existing.qty += qty;
   } else {
-    cart.push({ id, name: displayName, price: product.price, color, qty, petName, variant });
+    cart.push({ id, name: displayName, price: product.price, color, color2, qty, petName, variant });
   }
 
   updateCartUI();
-  showToast('+ ' + product.name + ' [' + color + ']');
+  const colorLabel = color2 ? color + ' + ' + color2 : color;
+  showToast('+ ' + product.name + ' [' + colorLabel + ']');
 
   const btn = document.getElementById('btn-' + id);
   if (btn) {
@@ -1803,7 +1812,7 @@ function renderOrderSummary() {
           item.donation   ? 'CONTRIBUTION ♥' :
           item.photoItem  ? `Photo: ${item.photoNote}` :
           item.makerworld ? `Link: ${item.mwLink.slice(0,45)}…  ·  Color: ${item.color}` :
-          `Color: ${item.color}  ·  Qty: ${item.qty}${item.petName ? '  ·  Pet: ' + item.petName : ''}${item.variant ? '  ·  Style: ' + item.variant : ''}`
+          `Color: ${item.color}${item.color2 ? ' + ' + item.color2 : ''}  ·  Qty: ${item.qty}${item.petName ? '  ·  Pet: ' + item.petName : ''}${item.variant ? '  ·  Style: ' + item.variant : ''}`
         }</div>
       </div>
       <div style="display:flex;align-items:center;gap:0.5rem">
@@ -1842,7 +1851,7 @@ function submitOrder() {
     if (item.donation)   return `  • ${item.name}  |  CONTRIBUTION  |  $${sub.toFixed(2)}`;
     if (item.photoItem)  return `  • ${item.name}  |  File: ${item.photoNote}  |  $${sub.toFixed(2)}\n    *** ATTACH PHOTO TO THIS EMAIL ***`;
     if (item.makerworld) return `  • MAKERWORLD REQUEST  |  Link: ${item.mwLink}  |  Color: ${item.color}  |  QUOTE NEEDED\n    Notes: ${item.mwNotes || 'none'}`;
-    return `  • ${item.name}  ×${item.qty}  |  Color: ${item.color}${item.variant ? '  |  Style: ' + item.variant : ''}${item.petName ? '  |  Pet: ' + item.petName : ''}  |  $${sub.toFixed(2)}`;
+    return `  • ${item.name}  ×${item.qty}  |  Color: ${item.color}${item.color2 ? ' + ' + item.color2 : ''}${item.variant ? '  |  Style: ' + item.variant : ''}${item.petName ? '  |  Pet: ' + item.petName : ''}  |  $${sub.toFixed(2)}`;
   }).join('\n');
 
   const body = [
@@ -2086,6 +2095,16 @@ function buildProductCard(p) {
     : `<div class="product-placeholder"><div class="ph-icon">${p.icon}</div><div class="ph-type">3D PRINT</div></div>`;
 
   const fc = getFirstColor();
+  const colorLabel1 = p.dualColor ? `<div style="font-size:0.58rem;letter-spacing:0.12em;color:#666;margin-bottom:0.3rem">${p.color1Label || 'COLOR'}</div>` : '';
+  const colorRow2 = p.dualColor ? (() => {
+    const label2 = `<div style="font-size:0.58rem;letter-spacing:0.12em;color:#666;margin:0.6rem 0 0.3rem">${p.color2Label || 'COLOR 2'}</div>`;
+    if (p.color2Options) {
+      const opts = p.color2Options.map(c => `<option value="${c}">${c}</option>`).join('');
+      return label2 + `<div class="color-row"><select id="color2-${p.id}" style="flex:1">${opts}</select></div>`;
+    }
+    return label2 + `<div class="color-row"><div class="color-dot" id="dot2-${p.id}" style="background:${fc.hex};${fc.border ? 'border-color:#555' : ''}"></div><select id="color2-${p.id}" onchange="updateDot2('${p.id}')">${buildColorOptions(p.id)}</select></div>`;
+  })() : '';
+
   return `<div class="product-card">
     <div class="product-img-wrap">${imgHtml}</div>
     <div class="product-body">
@@ -2098,13 +2117,15 @@ function buildProductCard(p) {
           ${p.variant.map(v => `<option value="${v}">${v}</option>`).join('')}
         </select>
       </div>` : ''}
+      ${colorLabel1}
       <div class="color-row">
         <div class="color-dot" id="dot-${p.id}" style="background:${fc.hex};${fc.border ? 'border-color:#555' : ''}"></div>
         <select id="color-${p.id}" onchange="updateDot('${p.id}')">
           ${buildColorOptions(p.id)}
         </select>
       </div>
-      ${p.petName ? `<div class="form-group" style="margin-bottom:0.75rem">
+      ${colorRow2}
+      ${p.petName ? `<div class="form-group" style="margin-bottom:0.75rem;margin-top:0.6rem">
         <label style="font-size:0.62rem;letter-spacing:0.12em;color:#666;display:block;margin-bottom:0.35rem">PET NAME(S) <span style="color:#555">(optional — printed on tag)</span></label>
         <input type="text" id="petname-${p.id}" placeholder="e.g. Mochi, Beans &amp; Tater" style="font-size:0.72rem">
       </div>` : ''}
@@ -2122,11 +2143,16 @@ function updateDot(id) {
   const dot = document.getElementById('dot-' + id);
   const color = filamentColors.find(c => c.name === sel.value);
   if (!color || !dot) return;
-  if (color.hex.startsWith('linear-gradient')) {
-    dot.style.background = color.hex;
-  } else {
-    dot.style.background = color.hex;
-  }
+  dot.style.background = color.hex;
+  dot.style.borderColor = color.border ? '#555' : 'var(--border)';
+}
+
+function updateDot2(id) {
+  const sel = document.getElementById('color2-' + id);
+  const dot = document.getElementById('dot2-' + id);
+  const color = filamentColors.find(c => c.name === sel.value);
+  if (!color || !dot) return;
+  dot.style.background = color.hex;
   dot.style.borderColor = color.border ? '#555' : 'var(--border)';
 }
 
